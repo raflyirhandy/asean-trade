@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filipina - Perdagangan Internasional</title>
+  
+  <!-- Google Fonts untuk font yang lebih hidup dan menarik -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', 'Quicksand', 'Segoe UI', sans-serif;
+    }
+
+    /* Header dengan efek gradasi */
+    header {
+      background: linear-gradient(135deg, #0038a8, #ce1126, #0038a8);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Efek overlay pada header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-size: 56px;
+      margin-bottom: 15px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      font-size: 22px;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.95;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigasi Sticky */
+    nav {
+      background: rgba(0, 56, 168, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+    }
+
+    nav a:hover {
+      background: #ce1126;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    nav a:first-child {
+      background: #ce1126;
+    }
+
+    nav a:first-child:hover {
+      background: #ffd60a;
+      color: #0038a8;
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 50px auto;
+    }
+
+    /* Card dengan efek modern */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 45px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+    }
+
+    h2 {
+      color: #0038a8;
+      margin-bottom: 25px;
+      border-left: 6px solid #ce1126;
+      padding-left: 20px;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      color: #0038a8;
+      margin: 30px 0 15px 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    p {
+      line-height: 1.9;
+      color: #444;
+      margin-bottom: 18px;
+      text-align: justify;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+    /* Gambar dengan efek */
+    .hero {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      margin-top: 30px;
+      display: block;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .hero:hover {
+      transform: scale(1.02);
+    }
+
+    /* Grid Komoditas */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 25px;
+    }
+
+    .item {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      padding: 28px;
+      border-radius: 20px;
+      border-top: 5px solid #ce1126;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    .item h4 {
+      color: #ce1126;
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .item p {
+      font-size: 14px;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* Tabel */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    table th {
+      background: linear-gradient(135deg, #0038a8, #002a80);
+      color: white;
+      padding: 16px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    table td {
+      padding: 14px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    table tr:hover {
+      background: #e0e8ff;
+      transition: 0.2s;
+    }
+
+    .highlight {
+      color: #ce1126;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* List Styling */
+    ul {
+      margin-left: 25px;
+      margin-top: 10px;
+    }
+
+    li {
+      margin: 12px 0;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* Dampak Grid */
+    .dampak-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 25px;
+    }
+
+    .dampak-positif {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #2e7d32;
+    }
+
+    .dampak-negatif {
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #c62828;
+    }
+
+    .dampak-positif h3, .dampak-negatif h3 {
+      margin-top: 0;
+      font-weight: 700;
+    }
+
+    .dampak-positif li, .dampak-negatif li {
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #0038a8, #002a80);
+      color: #cbd5e1;
+      text-align: center;
+      padding: 45px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      text-align: center;
+      margin: 12px 0;
+      color: #cbd5e1;
+    }
+
+    footer p:first-child {
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 36px;
+      }
+      header p {
+        font-size: 16px;
+      }
+      nav a {
+        margin: 5px;
+        font-size: 12px;
+        padding: 6px 14px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .card {
+        padding: 25px;
+      }
+      .dampak-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Perdagangan Internasional Filipina</h1>
+    
+  </header>
+
+  <nav>
+    <a href="index.html">Halaman Utama</a>
+    <a href="#komoditas">Komoditas</a>
+    <a href="#eksporimpor">Ekspor & Impor</a>
+    <a href="#dampak">Dampak</a>
+    <a href="#kesimpulan">Kesimpulan</a>
+  </nav>
+
+  <div class="container">
+    <!-- Section Tentang -->
+    <section id="tentang" class="card">
+      <h2>Tentang Filipina dan Perdagangan Internasional</h2>
+      <p>
+        <strong>Filipina</strong> adalah negara kepulauan di Asia Tenggara yang memiliki ekonomi berkembang
+        dengan sektor utama berupa elektronik, pertanian, jasa, dan industri manufaktur.
+        Negara ini terdiri dari lebih dari 7.000 pulau dengan populasi lebih dari 110 juta jiwa.
+      </p>
+      <p>
+        Letak geografis Filipina yang strategis di kawasan <strong>Asia Pasifik</strong> menjadikan negara ini
+        aktif dalam perdagangan internasional dengan berbagai negara di dunia. Filipina juga
+        merupakan anggota aktif ASEAN, WTO, dan APEC.
+      </p>
+      <p>
+        Perdagangan internasional memberikan kontribusi besar terhadap pertumbuhan ekonomi,
+        penciptaan lapangan kerja, dan peningkatan investasi asing di Filipina. Tenaga kerja
+        Filipina yang terampil dan berbahasa Inggris menjadi daya tarik bagi investor asing.
+      </p>
+      <img class="hero" src="https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=1200&auto=format&fit=crop"
+           alt="Pemandangan Alam Filipina">
+    </section>
+
+    <!-- Section Komoditas Ekspor -->
+    <section id="komoditas" class="card">
+      <h2>Komoditas Utama Ekspor Filipina</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Semikonduktor dan Elektronik</h4>
+          <p>Semikonduktor dan komponen elektronik menjadi komoditas ekspor terbesar Filipina, mencakup lebih dari 50 persen total ekspor.</p>
+        </div>
+        <div class="item">
+          <h4>Kelapa dan Produk Turunannya</h4>
+          <p>Filipina terkenal sebagai salah satu eksportir kelapa dan minyak kelapa terbesar di dunia.</p>
+        </div>
+        <div class="item">
+          <h4>Pisang</h4>
+          <p>Pisang Filipina diekspor ke Jepang, China, Korea Selatan, dan negara Asia lainnya dengan kualitas premium.</p>
+        </div>
+        <div class="item">
+          <h4>Tekstil dan Pakaian</h4>
+          <p>Produk tekstil dan pakaian menjadi bagian penting perdagangan Filipina ke pasar Amerika Serikat dan Eropa.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Perikanan</h4>
+          <p>Hasil laut, tuna, udang, dan produk perikanan lainnya menjadi komoditas unggulan Filipina.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Kayu dan Rotan</h4>
+          <p>Filipina juga mengekspor produk furnitur dari kayu dan rotan ke berbagai negara.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 45px;">Komoditas Utama Impor Filipina</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Mesin dan Peralatan Industri</h4>
+          <p>Digunakan untuk mendukung sektor manufaktur, produksi nasional, dan pembangunan infrastruktur.</p>
+        </div>
+        <div class="item">
+          <h4>Bahan Bakar Minyak dan Energi</h4>
+          <p>Filipina mengimpor minyak mentah dan produk energi untuk kebutuhan industri dan transportasi.</p>
+        </div>
+        <div class="item">
+          <h4>Komponen Elektronik</h4>
+          <p>Digunakan untuk produksi perangkat teknologi dan elektronik yang merupakan andalan ekspor Filipina.</p>
+        </div>
+        <div class="item">
+          <h4>Kendaraan dan Suku Cadang</h4>
+          <p>Filipina mengimpor kendaraan bermotor dan suku cadang otomotif dari Jepang, China, dan Thailand.</p>
+        </div>
+        <div class="item">
+          <h4>Bahan Pangan dan Gandum</h4>
+          <p>Filipina juga mengimpor beberapa kebutuhan pangan seperti gandum, susu, dan daging dari luar negeri.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Ekspor & Impor -->
+    <section id="eksporimpor" class="card">
+      <h2>Nilai Ekspor dan Impor Filipina</h2>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Keterangan</th>
+              <th>Nilai</th>
+              <th>Keterangan Tambahan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Nilai Ekspor</strong></td>
+              <td class="highlight">US$ 78 Miliar</td>
+              <td>Didominasi elektronik, semikonduktor, dan produk pertanian</td>
+            </tr>
+            <tr>
+              <td><strong>Nilai Impor</strong></td>
+              <td class="highlight">US$ 137 Miliar</td>
+              <td>Didominasi mesin industri, energi, dan komponen elektronik</td>
+            </tr>
+            <tr>
+              <td><strong>Neraca Perdagangan</strong></td>
+              <td class="highlight">Defisit US$ 59 Miliar</td>
+              <td>Impor lebih besar dibandingkan ekspor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Negara Tujuan Ekspor Utama Filipina</h3>
+      <ul>
+        <li>Amerika Serikat</li>
+        <li>China</li>
+        <li>Jepang</li>
+        <li>Hong Kong</li>
+        <li>Singapura</li>
+        <li>Korea Selatan</li>
+      </ul>
+
+      <h3>Negara Asal Impor Utama Filipina</h3>
+      <ul>
+        <li>China</li>
+        <li>Jepang</li>
+        <li>Korea Selatan</li>
+        <li>Amerika Serikat</li>
+        <li>Indonesia</li>
+        <li>Thailand</li>
+      </ul>
+    </section>
+
+    <!-- Section Dampak -->
+    <section id="dampak" class="card">
+      <h2>Dampak Perdagangan Internasional bagi Filipina</h2>
+      
+      <div class="dampak-grid">
+        <div class="dampak-positif">
+          <h3>Dampak Positif</h3>
+          <ul>
+            <li>Meningkatkan pertumbuhan ekonomi nasional secara signifikan</li>
+            <li>Membuka lapangan pekerjaan baru di sektor industri dan jasa</li>
+            <li>Meningkatkan investasi asing di sektor elektronik dan teknologi</li>
+            <li>Mendorong perkembangan teknologi dan industri manufaktur</li>
+            <li>Memperluas pasar produk Filipina ke seluruh dunia</li>
+            <li>Meningkatkan pendapatan devisa negara dari ekspor jasa dan BPO</li>
+          </ul>
+        </div>
+        <div class="dampak-negatif">
+          <h3>Dampak Negatif</h3>
+          <ul>
+            <li>Ketergantungan terhadap impor energi dan teknologi dari luar negeri</li>
+            <li>Persaingan global yang semakin tinggi dengan negara tetangga</li>
+            <li>Defisit perdagangan yang besar dapat mempengaruhi stabilitas ekonomi</li>
+            <li>Fluktuasi harga dunia mempengaruhi perdagangan Filipina</li>
+            <li>Rentan terhadap krisis ekonomi global dan perubahan kebijakan AS</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Kesimpulan -->
+    <section id="kesimpulan" class="card">
+      <h2>Kesimpulan</h2>
+      <p>
+        <strong>Filipina</strong> merupakan salah satu negara berkembang di Asia Tenggara yang aktif
+        dalam perdagangan internasional. Negara ini unggul dalam sektor <strong>elektronik,
+        semikonduktor, pertanian, dan perikanan</strong> dengan tenaga kerja terampil dan
+        berbahasa Inggris yang menjadi daya tarik investor asing.
+      </p>
+      <p>
+        Perdagangan internasional memberikan dampak besar terhadap perkembangan ekonomi
+        Filipina meskipun negara ini masih menghadapi tantangan berupa <strong>ketergantungan
+        terhadap impor</strong> dan defisit perdagangan yang signifikan. Sektor BPO dan
+        remitansi dari Tenaga Kerja Indonesia di luar negeri juga menjadi penopang ekonomi.
+      </p>
+      <p>
+        Dengan perkembangan industri dan teknologi yang terus meningkat, serta hubungan
+        dagang yang kuat dengan Amerika Serikat, China, dan Jepang, Filipina memiliki
+        potensi besar untuk meningkatkan daya saing perdagangan internasional di masa depan.
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <p>Artikel Perdagangan Internasional Filipina</p>
+    <p>Sumber: Bank Dunia, IMF, Otoritas Statistik Filipina, ASEAN Secretariat</p>
+    <p>Republik Filipina - Tahun 2026</p>
+  </footer>
+
+</body>
+</html>

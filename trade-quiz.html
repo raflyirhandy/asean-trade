@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Trade Quiz - Ular Tangga Perdagangan ASEAN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: linear-gradient(135deg, #f0f4f8 0%, #e9edf2 100%); min-height: 100vh; }
+
+    .page-transition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #001f54, #d90429); z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .page-transition.active { opacity: 1; visibility: visible; }
+    .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-top: 5px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    nav { background: linear-gradient(135deg, #001f54, #d90429, #001f54, #d90429); background-size: 300% 300%; animation: gradientMove 6s ease infinite; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; flex-wrap: wrap; }
+    @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    .logo { font-size: 24px; font-weight: 800; color: white; cursor: pointer; transition: transform 0.2s; }
+    .logo:hover { transform: scale(1.02); }
+    .menu { display: flex; gap: 25px; flex-wrap: wrap; }
+    .menu a { color: white; text-decoration: none; font-weight: 500; transition: 0.3s; font-size: 14px; position: relative; cursor: pointer; }
+    .menu a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: #ffd60a; transition: width 0.3s ease; }
+    .menu a:hover::after { width: 100%; }
+    .menu a:hover { color: #ffd60a; }
+    .quiz-nav-btn { background: rgba(255,214,10,0.2); padding: 5px 15px !important; border-radius: 30px; }
+
+    .page-header { background: linear-gradient(135deg, #001f54, #d90429); color: white; text-align: center; padding: 40px 20px; }
+    .page-header h1 { font-size: 42px; margin-bottom: 10px; font-weight: 800; }
+    .page-header p { font-size: 17px; max-width: 700px; margin: auto; color: rgba(255, 255, 255, 0.92); }
+
+    .game-wrapper { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; width: 95%; max-width: 1400px; margin: 30px auto; }
+    
+    .board-container { flex: 2; min-width: 550px; background: #fdf5e6; border-radius: 28px; padding: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); position: relative; }
+    .board-image { position: relative; width: 100%; display: flex; justify-content: center; }
+    .board-image img { width: 100%; max-width: 650px; height: auto; display: block; border-radius: 20px; }
+    .players-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    .player-marker { position: absolute; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; color: white; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4); border: 2px solid white; transform: translate(-50%, -50%); pointer-events: auto; z-index: 10; }
+    
+    .control-panel { flex: 1; min-width: 280px; background: white; border-radius: 28px; padding: 25px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; gap: 20px; }
+    
+    .players-info { background: #f1f5f9; border-radius: 20px; padding: 18px; }
+    .players-info h3 { color: #001f54; margin-bottom: 15px; font-size: 18px; border-left: 4px solid #d90429; padding-left: 12px; }
+    .player-list { display: flex; flex-direction: column; gap: 10px; }
+    .player-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: white; border-radius: 50px; transition: all 0.2s; }
+    .player-item.active { background: #001f54; color: white; box-shadow: 0 4px 12px rgba(0, 31, 84, 0.3); }
+    .player-item.active .player-name { color: white; }
+    .player-color { width: 30px; height: 30px; border-radius: 50%; margin-right: 12px; border: 1px solid #ccc; flex-shrink: 0; }
+    .player-name { flex: 1; font-weight: 600; font-size: 14px; }
+    .player-position { font-size: 12px; background: #e2e8f0; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
+    .player-score { font-size: 11px; background: #d90429; color: white; padding: 2px 8px; border-radius: 20px; margin-left: 8px; font-weight: 600; }
+
+    .dice-area { text-align: center; background: #f8fafc; padding: 20px; border-radius: 24px; }
+    .dice { width: 100px; height: 100px; background: white; border-radius: 20px; margin: 0 auto 15px; cursor: pointer; box-shadow: 0 12px 0 #bbb; transition: 0.08s linear; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 800; color: #1a1a2e; }
+    .dice:active { transform: translateY(6px); box-shadow: 0 6px 0 #bbb; }
+    .dice.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+    .roll-btn { background: linear-gradient(135deg, #d90429, #b00222); border: none; padding: 12px; font-size: 16px; font-weight: 700; border-radius: 50px; cursor: pointer; color: white; width: 100%; transition: 0.2s; }
+    .roll-btn:hover { transform: scale(1.02); }
+    .roll-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .reset-btn { background: #475569; color: white; border: none; padding: 10px; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+    .turn-indicator { background: #001f54; padding: 14px; border-radius: 50px; color: white; font-weight: bold; font-size: 18px; text-align: center; }
+
+    .welcome-card { background: white; border-radius: 28px; padding: 35px; text-align: center; max-width: 500px; margin: 20px auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .player-selector { display: flex; gap: 15px; justify-content: center; margin: 20px 0; }
+    .player-btn { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ccc; background: white; font-size: 20px; font-weight: bold; cursor: pointer; }
+    .player-btn.active { background: linear-gradient(135deg, #001f54, #d90429); color: white; border-color: #ffd60a; transform: scale(1.05); }
+    .start-btn { background: linear-gradient(135deg, #d90429, #b00222); color: white; border: none; padding: 12px 30px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+    .quiz-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: 0.3s; }
+    .quiz-modal.active { visibility: visible; opacity: 1; }
+    .quiz-card { background: white; max-width: 550px; width: 90%; border-radius: 32px; padding: 35px; text-align: center; max-height: 90vh; overflow-y: auto; }
+    .timer-bar { height: 8px; background: #e2e8f0; border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
+    .timer-progress { width: 100%; height: 100%; background: #d90429; transition: width 0.1s linear; }
+    .timer-text { font-size: 14px; color: #d90429; font-weight: 700; margin-bottom: 15px; }
+    .question-text { font-size: 20px; font-weight: 700; margin: 20px 0; color: #001f54; }
+    .options { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+    .opt-btn { background: #f1f5f9; padding: 14px; border-radius: 60px; border: none; font-size: 15px; font-weight: 500; cursor: pointer; text-align: left; padding-left: 20px; transition: 0.2s; }
+    .opt-btn:hover { background: #d90429; color: white; }
+    .opt-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .opt-btn.correct-answer { background: #22c55e; color: white; }
+    .opt-btn.wrong-answer { background: #ef4444; color: white; }
+    .feedback-msg { font-size: 14px; padding: 12px; border-radius: 16px; margin-top: 10px; }
+    .feedback-correct { background: #dcfce7; color: #166534; }
+    .feedback-wrong { background: #fee2e2; color: #991b1b; }
+
+    /* WINNER MODAL */
+    .winner-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 40px 50px;
+      border-radius: 32px;
+      text-align: center;
+      z-index: 2000;
+      min-width: 380px;
+      max-width: 500px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+      animation: popIn 0.5s ease;
+    }
+    @keyframes popIn {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      70% { transform: translate(-50%, -50%) scale(1.05); }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    .winner-modal .trophy { font-size: 80px; display: block; margin-bottom: 5px; }
+    .winner-modal .trophy.gold { filter: drop-shadow(0 0 20px rgba(255,215,0,0.6)); }
+    .winner-modal .trophy.silver { filter: drop-shadow(0 0 20px rgba(192,192,192,0.6)); }
+    .winner-modal .trophy.bronze { filter: drop-shadow(0 0 20px rgba(205,127,50,0.6)); }
+    .winner-modal .trophy.medal { filter: drop-shadow(0 0 20px rgba(0,31,84,0.5)); }
+    
+    .winner-modal .rank-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffd60a, #f59e0b);
+      color: #001f54;
+      font-weight: 800;
+      padding: 6px 24px;
+      border-radius: 40px;
+      font-size: 18px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .winner-modal .rank-badge.silver { background: linear-gradient(135deg, #c0c0c0, #9ca3af); color: #1a1a2e; }
+    .winner-modal .rank-badge.bronze { background: linear-gradient(135deg, #cd7f32, #b87333); color: white; }
+    .winner-modal .rank-badge.participant { background: linear-gradient(135deg, #64748b, #475569); color: white; }
+    
+    .winner-modal h1 { font-size: 28px; color: #001f54; margin: 10px 0 5px; }
+    .winner-modal .score-display { font-size: 22px; font-weight: 700; color: #d90429; margin: 10px 0; }
+    .winner-modal .score-display span { font-size: 36px; }
+    .winner-modal .motivation {
+      font-size: 16px;
+      font-weight: 500;
+      color: #4b3b5a;
+      margin-top: 15px;
+      padding: 15px 20px;
+      background: #f1f5f9;
+      border-radius: 16px;
+      line-height: 1.6;
+    }
+    .winner-modal .play-again-btn {
+      background: linear-gradient(135deg, #001f54, #1a3a7a);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+    .winner-modal .play-again-btn:hover { transform: scale(1.03); box-shadow: 0 8px 20px rgba(0,31,84,0.3); }
+    .winner-modal .player-summary { display: flex; justify-content: center; gap: 30px; margin: 15px 0; flex-wrap: wrap; }
+    .winner-modal .player-summary .stat { background: #f8fafc; padding: 8px 16px; border-radius: 16px; font-size: 14px; }
+    .winner-modal .player-summary .stat strong { color: #001f54; }
+
+    .info-box { background: #fef9e7; border-left: 4px solid #ffd60a; padding: 12px 16px; border-radius: 12px; font-size: 13px; color: #5b4a1a; margin-bottom: 10px; }
+
+    footer { background: linear-gradient(135deg, #001538, #001f54); color: white; padding: 40px 40px 30px; margin-top: 50px; text-align: center; }
+    footer p { color: rgba(255,255,255,0.8); }
+    .copyright { margin-top: 20px; font-size: 13px; opacity: 0.7; }
+
+    @media (max-width: 900px) {
+      nav { flex-direction: column; gap: 12px; }
+      .game-wrapper { flex-direction: column; align-items: center; }
+      .board-container { min-width: unset; width: 100%; max-width: 650px; padding: 15px; }
+      .control-panel { min-width: unset; width: 100%; max-width: 650px; }
+      .player-marker { width: 28px; height: 28px; font-size: 9px; }
+      .winner-modal { min-width: 320px; padding: 30px 25px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="pageTransition" class="page-transition"><div class="spinner"></div></div>
+
+<nav>
+  <div class="logo" onclick="navigateTo('kurs.html')">ASEAN TRADE</div>
+  <div class="menu">
+    <a href="javascript:void(0)" onclick="navigateTo('kurs.html')">Beranda</a>
+    <a href="javascript:void(0)" onclick="navigateTo('index.html')">Negara ASEAN</a>
+    <a href="javascript:void(0)" onclick="navigateTo('kurs.html')">Kurs</a>
+    <a href="javascript:void(0)" onclick="navigateTo('statistik.html')">Statistik</a>
+    <a href="javascript:void(0)" onclick="navigateTo('trade-quiz.html')" class="quiz-nav-btn" style="color: #ffd60a;">Trade Quiz</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Trade Quiz - Ular Tangga ASEAN</h1>
+  <p>Lempar dadu, jawab pertanyaan, dan raih posisi finish tercepat</p>
+</div>
+
+<div id="gameWrapper" class="game-wrapper"></div>
+
+<footer>
+  <p>ASEAN Trade - Portal Perdagangan Internasional Asia Tenggara</p>
+  <p>Data kurs berdasarkan sumber terpercaya dan diperbarui secara real-time.</p>
+  <div class="copyright">2026 ASEAN Trade. All rights reserved.</div>
+</footer>
+
+<script>
+  function navigateTo(page) {
+    const transition = document.getElementById('pageTransition');
+    transition.classList.add('active');
+    setTimeout(() => { window.location.href = page; }, 250);
+  }
+
+  // ======================= 25 SOAL PERDAGANGAN ASEAN =======================
+  const questions = {
+    0: { text: "Indonesia mengalami peningkatan ekspor kopi ke Singapura. Dampak yang paling mungkin terjadi adalah ...", options: ["Pendapatan petani kopi meningkat", "Nilai impor Indonesia meningkat", "Harga kopi dunia menurun", "Jumlah penduduk bertambah"], correct: 0, explanation: "Ekspor meningkat mendorong pendapatan petani." },
+    1: { text: "Jika nilai tukar rupiah melemah terhadap dolar AS, maka importir akan ...", options: ["Biaya lebih besar", "Biaya lebih murah", "Tidak terpengaruh", "Untung besar"], correct: 0, explanation: "Rupiah melemah butuh lebih banyak rupiah." },
+    2: { text: "Ekspor > Impor disebut ...", options: ["Defisit", "Surplus", "Inflasi", "Resesi"], correct: 1, explanation: "Surplus = ekspor lebih besar." },
+    3: { text: "Thailand meningkatkan kualitas produk ekspor. Strategi ini penting untuk ...", options: ["Daya saing", "Monopoli", "Larangan ekspor", "Subsidi"], correct: 0, explanation: "Kualitas meningkatkan daya saing global." },
+    4: { text: "Mengapa kurs penting dalam perdagangan?", options: ["Menentukan nilai transaksi", "Menentukan bahasa", "Menentukan iklim", "Menentukan populasi"], correct: 0, explanation: "Kurs menentukan nilai tukar." },
+    5: { text: "Harga impor naik akibat kurs melemah. Solusi tepat pemerintah?", options: ["Pakai produk dalam negeri", "Stop ekspor", "Tutup pelabuhan", "Kurangi produksi"], correct: 0, explanation: "Substitusi impor kurangi ketergantungan." },
+    6: { text: "Kamboja ekspor tekstil. Permintaan turun drastis, akibatnya?", options: ["Pendapatan ekspor turun", "Ekspor naik", "Kurs menguat", "Tenaga kerja bertambah"], correct: 0, explanation: "Turun permintaan = turun pendapatan." },
+    7: { text: "Impor > Ekspor disebut ...", options: ["Surplus", "Defisit", "Stabil", "Seimbang"], correct: 1, explanation: "Defisit = impor lebih besar." },
+    8: { text: "Faktor penting selain kualitas saat ekspor ke Filipina?", options: ["Nilai tukar", "Warna bendera", "Luas wilayah", "Jumlah pulau"], correct: 0, explanation: "Nilai tukar mempengaruhi harga jual." },
+    9: { text: "Ekspor meningkat berkelanjutan dampaknya?", options: ["Pendapatan negara naik", "Ekspor turun", "Kurs hilang", "Inflasi tinggi"], correct: 0, explanation: "Ekspor naik = devisa naik." },
+    10: { text: "Negara ASEAN saling berdagang karena?", options: ["Memenuhi kebutuhan", "Kurangi penduduk", "Ubah iklim", "Hilangkan mata uang"], correct: 0, explanation: "Perbedaan sumber daya saling melengkapi." },
+    11: { text: "Mata uang terlalu kuat efek ke ekspor?", options: ["Lebih mahal bagi pembeli", "Lebih murah", "Gratis", "Tidak bisa dijual"], correct: 0, explanation: "Mata uang kuat = harga ekspor mahal." },
+    12: { text: "Brunei impor beras karena?", options: ["Tidak semua produksi sendiri", "Penduduk sedikit", "Tidak punya uang", "Tidak punya pemerintah"], correct: 0, explanation: "Perdagangan atasi keterbatasan." },
+    13: { text: "Surplus terus-menerus berarti?", options: ["Ekspor > Impor", "Impor > Ekspor", "Tidak ada perdagangan", "Resesi"], correct: 0, explanation: "Surplus = ekspor lebih besar." },
+    14: { text: "Perubahan kurs mempengaruhi harga impor karena?", options: ["Kurs menentukan nilai bayar", "Kurs tentukan cuaca", "Kurs tentukan luas", "Kurs tentukan jumlah"], correct: 0, explanation: "Barang impor dibayar dengan valas." },
+    15: { text: "Tingkatkan ekspor, kebijakan efektif?", options: ["Tingkatkan kualitas", "Kurangi produksi", "Tutup pelabuhan", "Stop perdagangan"], correct: 0, explanation: "Kualitas tingkatkan daya saing." },
+    16: { text: "Perdagangan internasional meningkatkan kesejahteraan karena?", options: ["Buka lapangan kerja", "Kurangi produksi", "Hilangkan kebutuhan", "Turunkan pendapatan"], correct: 0, explanation: "Perdagangan ciptakan lapangan kerja." },
+    17: { text: "Impor > Ekspor jangka panjang dampak?", options: ["Defisit", "Surplus", "Ekspor naik otomatis", "Harga nol"], correct: 0, explanation: "Defisit berkepanjangan." },
+    18: { text: "Mengapa harus jaga hubungan dagang ASEAN?", options: ["Kerja sama ekonomi", "Kurangi negara", "Samakan mata uang", "Hentikan ekspor"], correct: 0, explanation: "Hubungan baik perkuat integrasi." },
+    19: { text: "Rupiah melemah, sektor diuntungkan?", options: ["Eksportir", "Importir", "Konsumen impor", "Pembeli luar negeri"], correct: 0, explanation: "Produk ekspor lebih murah di luar." },
+    20: { text: "Indonesia vs Thailand ekspor beras, cara menang?", options: ["Tingkatkan kualitas", "Turunkan kualitas", "Stop ekspor", "Tutup pasar"], correct: 0, explanation: "Kualitas kunci keunggulan." },
+    21: { text: "Negara akan impor barang jika?", options: ["Lebih efisien dari luar", "Tersedia banyak", "Tidak ada perdagangan", "Tidak ada kebutuhan"], correct: 0, explanation: "Prinsip keunggulan komparatif." },
+    22: { text: "Dolar naik dari 15rb ke 18rb, importir akan?", options: ["Bayar lebih mahal", "Bayar lebih murah", "Tidak terpengaruh", "Dapat subsidi"], correct: 0, explanation: "Biaya impor membengkak." },
+    23: { text: "Ekspor meningkat -> Produksi naik -> ...", options: ["Kesempatan kerja naik", "Ekspor turun", "Inflasi", "Resesi"], correct: 0, explanation: "Ekspor naik dorong serapan kerja." },
+    24: { text: "Penurunan ekspor 3 tahun, langkah tepat?", options: ["Tingkatkan daya saing", "Stop produksi", "Tutup pelabuhan", "Kurangi perdagangan"], correct: 0, explanation: "Daya saing solusi jangka panjang." }
+  };
+
+  // Tangga (naik) dan Ular (turun) - index 0-24
+  const ladders = { 2: 14, 6: 22, 10: 19, 18: 24 };
+  const snakes = { 15: 5, 17: 9, 20: 3, 23: 12 };
+  
+  const playerColors = ["#d90429", "#001f54", "#1f9d55", "#ff8c00"];
+  const playerShorts = ["P1", "P2", "P3", "P4"];
+
+  let players = [], currentPlayerIdx = 0, gameActive = true, winnerDeclared = false, finishWinner = null;
+  let waitingAnswer = false, currentCallback = null, timerInt = null;
+  let isSinglePlayer = false;
+  let singlePlayerIndex = 0;
+
+  // ======================= MOTIVASI BERDASARKAN SKOR =======================
+  function getMotivationByScore(score, maxScore = 100) {
+    const percentage = (score / maxScore) * 100;
+    
+    if (percentage >= 90) {
+      return {
+        icon: "🏆",
+        rank: "GOLD",
+        rankClass: "gold",
+        message: "Luar biasa! Kamu benar-benar ahli perdagangan ASEAN! Your knowledge is exceptional and you clearly understand the complexities of international trade in Southeast Asia. Pertahankan prestasi ini!",
+        shortMsg: "Legendary Performance! Kamu adalah Trade Master!"
+      };
+    } else if (percentage >= 70) {
+      return {
+        icon: "🥈",
+        rank: "SILVER",
+        rankClass: "silver",
+        message: "Hasil yang sangat baik! Kamu memiliki pemahaman yang kuat tentang konsep perdagangan ASEAN. Keep learning and exploring the world of international trade!",
+        shortMsg: "Great Job! Kamu di jalur yang tepat!"
+      };
+    } else if (percentage >= 50) {
+      return {
+        icon: "🥉",
+        rank: "BRONZE",
+        rankClass: "bronze",
+        message: "Usaha yang bagus! Kamu memiliki fondasi yang solid dalam perdagangan ASEAN. Keep studying and you'll continue to improve. Setiap soal yang kamu jawab membantu membangun pengetahuanmu!",
+        shortMsg: "Keep Going! Pengetahuanmu terus bertambah!"
+      };
+    } else if (percentage >= 30) {
+      return {
+        icon: "📚",
+        rank: "LEARNER",
+        rankClass: "medal",
+        message: "Usaha yang baik! Belajar tentang perdagangan ASEAN memang butuh waktu. Jangan menyerah - review materi dan coba lagi. Every attempt makes you smarter!",
+        shortMsg: "Keep Learning! Review dan coba lagi!"
+      };
+    } else {
+      return {
+        icon: "💪",
+        rank: "BEGINNER",
+        rankClass: "medal",
+        message: "Semua orang mulai dari awal! Perdagangan ASEAN adalah topik yang menarik. Take your time to learn the basics, and you'll improve quickly. Kami percaya padamu!",
+        shortMsg: "Start Fresh! Kamu pasti bisa!"
+      };
+    }
+  }
+
+  // ======================= POSISI UNTUK GAMBAR ULAR TANGGA =======================
+  const cellPositions = {
+    1: { x: 12.5, y: 87 }, 2: { x: 29, y: 87 }, 3: { x: 45.5, y: 87 }, 4: { x: 62, y: 87 }, 5: { x: 78.5, y: 87 },
+    6: { x: 78.5, y: 73 }, 7: { x: 62, y: 73 }, 8: { x: 45.5, y: 73 }, 9: { x: 29, y: 73 }, 10: { x: 12.5, y: 73 },
+    11: { x: 12.5, y: 59 }, 12: { x: 29, y: 59 }, 13: { x: 45.5, y: 59 }, 14: { x: 62, y: 59 }, 15: { x: 78.5, y: 59 },
+    16: { x: 78.5, y: 45 }, 17: { x: 62, y: 45 }, 18: { x: 45.5, y: 45 }, 19: { x: 29, y: 45 }, 20: { x: 12.5, y: 45 },
+    21: { x: 12.5, y: 31 }, 22: { x: 29, y: 31 }, 23: { x: 45.5, y: 31 }, 24: { x: 62, y: 31 }, 25: { x: 78.5, y: 31 }
+  };
+
+  function applyLadderSnake(pos) { 
+    let np = pos; 
+    if(ladders[pos]) np = ladders[pos]; 
+    if(snakes[pos]) np = snakes[pos]; 
+    return np; 
+  }
+
+  function renderPlayersOverlay() {
+    const overlay = document.getElementById("playersOverlay");
+    if(!overlay) return;
+    overlay.innerHTML = "";
+    
+    players.forEach(p => {
+      const posNum = Math.min(p.pos + 1, 25);
+      const pos = cellPositions[posNum];
+      if(pos) {
+        const marker = document.createElement('div');
+        marker.className = 'player-marker';
+        marker.style.background = p.color;
+        marker.style.left = `calc(${pos.x}% - 18px)`;
+        marker.style.top = `calc(${pos.y}% - 18px)`;
+        marker.innerText = p.short;
+        overlay.appendChild(marker);
+      }
+    });
+  }
+
+  function updatePlayerListUI() {
+    const listDiv = document.getElementById("playerList");
+    if(!listDiv) return;
+    listDiv.innerHTML = "";
+    players.forEach((p, idx) => {
+      let div = document.createElement("div"); div.className = "player-item";
+      if(idx === currentPlayerIdx && gameActive && !winnerDeclared) div.classList.add("active");
+      div.innerHTML = `<div style="display:flex; align-items:center;"><div class="player-color" style="background:${p.color}"></div><span class="player-name">${p.name}</span><span class="player-score">${p.score} pts</span></div><span class="player-position">Kotak ${p.pos+1}</span>`;
+      listDiv.appendChild(div);
+    });
+    const turnSpan = document.getElementById("turnName");
+    if(turnSpan) {
+      if(isSinglePlayer && gameActive) {
+        turnSpan.innerText = `Soal ${singlePlayerIndex + 1} dari 25`;
+      } else if(gameActive && !winnerDeclared) {
+        turnSpan.innerText = `Giliran: ${players[currentPlayerIdx].name}`;
+      } else {
+        turnSpan.innerText = "Game Selesai";
+      }
+    }
+  }
+
+  function updateAll() {
+    updatePlayerListUI();
+    renderPlayersOverlay();
+  }
+
+  function stopTimer() { if(timerInt) clearInterval(timerInt); }
+  
+  function showQuestion(cellNum, callback) {
+    const q = questions[cellNum];
+    if(!q) { callback(true); return; }
+    waitingAnswer = true; currentCallback = callback; gameActive = false;
+    document.getElementById("questionText").innerText = q.text;
+    const optsDiv = document.getElementById("optionsDiv"); optsDiv.innerHTML = "";
+    q.options.forEach((opt, idx) => {
+      let btn = document.createElement("button"); btn.className = "opt-btn"; btn.innerText = `${String.fromCharCode(65+idx)}. ${opt}`;
+      btn.onclick = () => {
+        if(!waitingAnswer) return; stopTimer(); waitingAnswer = false;
+        let isCorrect = (idx === q.correct);
+        let fb = document.getElementById("feedbackMsg");
+        document.querySelectorAll(".opt-btn").forEach(b=>b.disabled=true);
+        if(isCorrect) { 
+          btn.classList.add("correct-answer");
+          fb.className = "feedback-msg feedback-correct"; 
+          fb.innerHTML = `Benar! +4 poin<br>${q.explanation}`; 
+        } else { 
+          btn.classList.add("wrong-answer");
+          document.querySelectorAll(".opt-btn")[q.correct].classList.add("correct-answer");
+          fb.className = "feedback-msg feedback-wrong"; 
+          fb.innerHTML = `Salah! Jawaban benar: ${q.options[q.correct]}<br>${q.explanation}`; 
+        }
+        setTimeout(()=>{ document.getElementById("quizModal").classList.remove("active"); callback(isCorrect); }, 2000);
+      };
+      optsDiv.appendChild(btn);
+    });
+    document.getElementById("feedbackMsg").innerHTML = ""; 
+    document.getElementById("quizModal").classList.add("active");
+    let timeLeft = 15; const progress = document.getElementById("timerProgress"); const textSpan = document.getElementById("timerText");
+    progress.style.width = "100%"; textSpan.innerText = "Waktu tersisa: 15 detik";
+    timerInt = setInterval(() => {
+      if(!waitingAnswer) return;
+      timeLeft--; let percent = (timeLeft/15)*100; progress.style.width = percent+"%"; textSpan.innerText = `Waktu tersisa: ${timeLeft} detik`;
+      if(timeLeft <= 0) { stopTimer(); if(waitingAnswer) { waitingAnswer=false; document.querySelectorAll(".opt-btn").forEach(b=>b.disabled=true); document.querySelectorAll(".opt-btn")[q.correct].classList.add("correct-answer"); document.getElementById("feedbackMsg").className="feedback-msg feedback-wrong"; document.getElementById("feedbackMsg").innerHTML = `Waktu habis! Jawaban benar: ${q.options[q.correct]}<br>${q.explanation}`; setTimeout(()=>{ document.getElementById("quizModal").classList.remove("active"); callback(false); },2000); } }
+    }, 1000);
+  }
+
+  function movePlayer(steps, isCorrect) {
+    let p = players[currentPlayerIdx];
+    if(isCorrect) p.score += 4;
+    let newPos = p.pos + steps;
+    if(newPos >= 25) { 
+      p.pos = 24; 
+      finishWinner = { ...p }; 
+      gameActive = false; 
+      winnerDeclared = true; 
+      updateAll(); 
+      showWinner(); 
+      return false; 
+    }
+    newPos = applyLadderSnake(newPos); 
+    p.pos = Math.min(newPos, 24); 
+    updateAll(); 
+    return true;
+  }
+
+  // ======================= 1 PEMAIN =======================
+  function nextSinglePlayerQuestion() {
+    if(!gameActive || winnerDeclared || waitingAnswer) return;
+    if(singlePlayerIndex >= 25) {
+      gameActive = false;
+      winnerDeclared = true;
+      finishWinner = { ...players[0] };
+      updateAll();
+      showWinner();
+      return;
+    }
+    
+    const diceDiv = document.getElementById("diceBtn");
+    const rollBtn = document.getElementById("rollAction");
+    diceDiv.classList.add("disabled");
+    rollBtn.disabled = true;
+    
+    document.getElementById("turnName").innerText = `Soal ${singlePlayerIndex + 1} dari 25`;
+    
+    showQuestion(singlePlayerIndex, (isCorrect) => {
+      let p = players[0];
+      if(isCorrect) p.score += 4;
+      
+      let newPos = p.pos + 1;
+      if(newPos >= 25) { 
+        p.pos = 24; 
+        finishWinner = { ...p }; 
+        gameActive = false; 
+        winnerDeclared = true; 
+        updateAll(); 
+        showWinner(); 
+        return; 
+      }
+      newPos = applyLadderSnake(newPos); 
+      p.pos = Math.min(newPos, 24);
+      
+      singlePlayerIndex++;
+      updateAll();
+      gameActive = true;
+      
+      diceDiv.classList.remove("disabled");
+      rollBtn.disabled = false;
+      
+      if(gameActive && !winnerDeclared && singlePlayerIndex < 25) {
+        setTimeout(() => {
+          nextSinglePlayerQuestion();
+        }, 800);
+      } else if(singlePlayerIndex >= 25) {
+        gameActive = false;
+        winnerDeclared = true;
+        finishWinner = { ...players[0] };
+        updateAll();
+        showWinner();
+      }
+    });
+  }
+
+  // ======================= DADU UNTUK 2-4 PEMAIN =======================
+  function rollDice() {
+    if(!gameActive || winnerDeclared || waitingAnswer) { 
+      alert("Game sedang berjalan atau sudah selesai!"); 
+      return; 
+    }
+    if(isSinglePlayer) {
+      nextSinglePlayerQuestion();
+      return;
+    }
+    
+    let dice = Math.floor(Math.random()*6)+1;
+    document.getElementById("diceInner").innerText = dice;
+    let diceDiv = document.getElementById("diceBtn"); 
+    diceDiv.style.transform = "translateY(6px)"; 
+    setTimeout(()=>diceDiv.style.transform="translateY(0)",150);
+    
+    const rollBtn = document.getElementById("rollAction");
+    rollBtn.disabled = true;
+    
+    let targetPos = Math.min(players[currentPlayerIdx].pos + dice, 24);
+    showQuestion(targetPos, (isCorrect) => {
+      let totalStep = dice + (isCorrect ? 1 : 0);
+      let cont = movePlayer(totalStep, isCorrect);
+      
+      // PERBAIKAN LOGIKA: gameActive diubah jadi true dulu sebelum pengecekan turn
+      gameActive = true; 
+      if(!winnerDeclared && cont && players.length) { 
+        currentPlayerIdx = (currentPlayerIdx+1) % players.length; 
+      }
+      updateAll(); 
+      rollBtn.disabled = false;
+    });
+  }
+
+  // ======================= WINNER MODAL =======================
+  function showWinner() {
+    let highScore = -1, best = null; 
+    players.forEach(p=>{ if(p.score > highScore){ highScore=p.score; best=p; } });
+    
+    const maxScore = 100;
+    const motivasi = getMotivationByScore(highScore, maxScore);
+    
+    let winnerHtml = `
+      <div class="winner-modal">
+        <span class="trophy ${motivasi.rankClass}">${motivasi.icon}</span>
+        <div class="rank-badge ${motivasi.rankClass}">${motivasi.rank}</div>
+        <h1>GAME OVER</h1>
+    `;
+    
+    if(finishWinner && best && finishWinner.id===best.id) {
+      winnerHtml += `<div class="score-display"><span>${finishWinner.score}</span> poin</div>`;
+      winnerHtml += `<p style="font-weight:600; color:#001f54;">${finishWinner.name} - First to Finish & Skor Tertinggi!</p>`;
+    } else if(finishWinner) {
+      winnerHtml += `<p style="font-weight:600; color:#001f54;">🏁 Finish Pertama: ${finishWinner.name} (${finishWinner.score} pts)</p>`;
+      winnerHtml += `<div class="score-display"><span>${best?.score}</span> poin</div>`;
+      winnerHtml += `<p style="font-weight:600; color:#001f54;">Skor Tertinggi: ${best?.name}</p>`;
+    } else {
+      winnerHtml += `<div class="score-display"><span>${best?.score}</span> poin</div>`;
+      winnerHtml += `<p style="font-weight:600; color:#001f54;">Pemenang Skor Tertinggi: ${best?.name}</p>`;
+    }
+    
+    winnerHtml += `
+        <div class="motivation">${motivasi.message}</div>
+        <button class="play-again-btn" onclick="location.reload()">🔄 Main Lagi</button>
+      </div>
+    `;
+    
+    const oldModal = document.querySelector('.winner-modal');
+    if(oldModal) oldModal.remove();
+    
+    document.body.insertAdjacentHTML("beforeend", winnerHtml);
+    winnerDeclared = true;
+  }
+
+  function initGame(playerCount) {
+    players = [];
+    isSinglePlayer = (playerCount === 1);
+    singlePlayerIndex = 0;
+    
+    for(let i=0;i<playerCount;i++) {
+      let name = isSinglePlayer ? "Pemain" : `Pemain ${i+1}`;
+      players.push({ id:i, name:name, pos:0, color:playerColors[i], short:playerShorts[i], score:0 });
+    }
+    currentPlayerIdx = 0; gameActive = true; winnerDeclared = false; finishWinner = null;
+    
+    const container = document.getElementById("gameWrapper");
+    container.innerHTML = `
+      <div class="board-container">
+  <div class="board-image">
+    <img id="boardImg" src="img%202/ular_tangga.jpeg" alt="Snakes and Ladders Board" style="width:100%; max-width:650px; display:block; margin:0 auto;">
+    <div class="players-overlay" id="playersOverlay"></div>
+  </div>
+</div>
+<div class="control-panel">
+  <div class="players-info"><h3>PEMAIN</h3><div class="player-list" id="playerList"></div></div>
+  <div class="dice-area">
+    <div class="dice" id="diceBtn"><div class="dice-inner" id="diceInner" style="font-size:48px; font-weight:800;">${isSinglePlayer ? '?' : '1'}</div></div>
+    <button class="roll-btn" id="rollAction">${isSinglePlayer ? 'MULAI KUIS' : 'LEMPAR DADU'}</button>
+    <button class="reset-btn" id="resetGameBtn">RESET GAME</button>
+  </div>
+  <div class="turn-indicator" id="turnName">${isSinglePlayer ? 'Klik Mulai Kuis' : 'Giliran: Pemain 1'}</div>
+  ${isSinglePlayer ? '<div class="info-box">Mode 1 Pemain: Kamu akan mengerjakan 25 soal secara berurutan. Setiap jawaban benar +4 poin.</div>' : ''}
+</div>
+    `;
+    
+    const img = document.getElementById("boardImg");
+    img.onload = () => { renderPlayersOverlay(); };
+    img.onerror = () => { 
+      img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="650" height="650" viewBox="0 0 650 650"%3E%3Crect fill="%232a1e4a" width="650" height="650"/%3E%3Ctext x="325" y="325" text-anchor="middle" fill="white" font-size="40" font-family="Arial" dominant-baseline="central"%3EUlar Tangga ASEAN%3C/text%3E%3Ctext x="325" y="380" text-anchor="middle" fill="%23facc15" font-size="20" font-family="Arial"%3EPapan Permainan%3C/text%3E%3C/svg%3E';
+      renderPlayersOverlay(); 
+    };
+    updateAll();
+    
+    const rollBtn = document.getElementById("rollAction");
+    if(isSinglePlayer) {
+      rollBtn.addEventListener("click", () => {
+        if(gameActive && !winnerDeclared && !waitingAnswer) {
+          rollBtn.disabled = true;
+          nextSinglePlayerQuestion();
+        }
+      });
+    } else {
+      rollBtn.addEventListener("click", rollDice);
+    }
+    
+    document.getElementById("resetGameBtn").addEventListener("click", () => location.reload());
+  }
+
+  // ======================= WELCOME SCREEN =======================
+  let selected = 1;
+  document.getElementById("gameWrapper").innerHTML = `
+    <div class="welcome-card">
+      <h2>SELAMAT DATANG DI TRADE QUIZ</h2>
+      <p>Ular Tangga - Edisi Perdagangan ASEAN</p>
+      <div class="player-selector" id="playerSelector">
+        <button data-count="1" class="player-btn active">1</button>
+        <button data-count="2" class="player-btn">2</button>
+        <button data-count="3" class="player-btn">3</button>
+        <button data-count="4" class="player-btn">4</button>
+      </div>
+      <div style="font-size:13px; color:#6b5b7a; margin:10px 0;">
+        <span id="modeDesc">Mode 1 Pemain: 25 soal berurutan tanpa dadu</span>
+      </div>
+      <button class="start-btn" id="startGameBtn">MULAI GAME</button>
+    </div>
+  `;
+  
+  document.querySelectorAll(".player-btn").forEach(btn => { 
+    btn.addEventListener("click", () => { 
+      document.querySelectorAll(".player-btn").forEach(b=>b.classList.remove("active")); 
+      btn.classList.add("active"); 
+      selected = parseInt(btn.dataset.count);
+      const desc = document.getElementById("modeDesc");
+      if(selected === 1) {
+        desc.innerText = "Mode 1 Pemain: 25 soal berurutan tanpa dadu";
+      } else {
+        desc.innerText = `Mode ${selected} Pemain: Giliran dadu + soal`;
+      }
+    }); 
+  });
+  
+  document.getElementById("startGameBtn").addEventListener("click", () => initGame(selected));
+
+  // ======================= MODAL SOAL =======================
+  const modalDiv = document.createElement("div"); modalDiv.id = "quizModal"; modalDiv.className = "quiz-modal";
+  modalDiv.innerHTML = `
+    <div class="quiz-card">
+      <div class="timer-bar"><div class="timer-progress" id="timerProgress"></div></div>
+      <div class="timer-text" id="timerText">Waktu tersisa: 15 detik</div>
+      <div id="questionText" class="question-text"></div>
+      <div id="optionsDiv" class="options"></div>
+      <div id="feedbackMsg" class="feedback-msg"></div>
+    </div>
+  `;
+  document.body.appendChild(modalDiv);
+</script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kamboja - Perdagangan Internasional</title>
+  
+  <!-- Google Fonts untuk font yang lebih hidup dan menarik -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', 'Quicksand', 'Segoe UI', sans-serif;
+    }
+
+    /* Header dengan efek gradasi */
+    header {
+      background: linear-gradient(135deg, #032ea1, #d00000, #032ea1);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Efek overlay pada header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-size: 56px;
+      margin-bottom: 15px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      font-size: 22px;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.95;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigasi Sticky */
+    nav {
+      background: rgba(3, 46, 161, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+    }
+
+    nav a:hover {
+      background: #d00000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    nav a:first-child {
+      background: #d00000;
+    }
+
+    nav a:first-child:hover {
+      background: #ffcc00;
+      color: #032ea1;
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 50px auto;
+    }
+
+    /* Card dengan efek modern */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 45px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+    }
+
+    h2 {
+      color: #032ea1;
+      margin-bottom: 25px;
+      border-left: 6px solid #d00000;
+      padding-left: 20px;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      color: #032ea1;
+      margin: 30px 0 15px 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    p {
+      line-height: 1.9;
+      color: #444;
+      margin-bottom: 18px;
+      text-align: justify;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+    /* Gambar dengan efek - TIDAK TERPOTONG */
+    .hero-image {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      margin-top: 30px;
+      display: block;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .hero-image:hover {
+      transform: scale(1.02);
+    }
+
+    /* Grid Komoditas */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 25px;
+    }
+
+    .item {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      padding: 28px;
+      border-radius: 20px;
+      border-top: 5px solid #d00000;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    .item h4 {
+      color: #d00000;
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .item p {
+      font-size: 14px;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* Tabel */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    table th {
+      background: linear-gradient(135deg, #032ea1, #022580);
+      color: white;
+      padding: 16px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    table td {
+      padding: 14px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    table tr:hover {
+      background: #e0e8ff;
+      transition: 0.2s;
+    }
+
+    .highlight {
+      color: #d00000;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* List Styling */
+    ul {
+      margin-left: 25px;
+      margin-top: 10px;
+    }
+
+    li {
+      margin: 12px 0;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .country-list {
+      list-style: none;
+      margin-left: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .country-list li {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #f1f5f9, #ffffff);
+      border-radius: 40px;
+      margin: 5px;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+    }
+
+    .country-list li:hover {
+      background: #d00000;
+      color: white;
+      transform: translateX(3px);
+    }
+
+    /* Dampak Grid */
+    .dampak-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 25px;
+    }
+
+    .dampak-positif {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #2e7d32;
+    }
+
+    .dampak-negatif {
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #c62828;
+    }
+
+    .dampak-positif h3, .dampak-negatif h3 {
+      margin-top: 0;
+      font-weight: 700;
+    }
+
+    .dampak-positif li, .dampak-negatif li {
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #032ea1, #022580);
+      color: #cbd5e1;
+      text-align: center;
+      padding: 45px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      text-align: center;
+      margin: 12px 0;
+      color: #cbd5e1;
+    }
+
+    footer p:first-child {
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 36px;
+      }
+      header p {
+        font-size: 16px;
+      }
+      nav a {
+        margin: 5px;
+        font-size: 12px;
+        padding: 6px 14px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .card {
+        padding: 25px;
+      }
+      .dampak-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Perdagangan Internasional Kamboja</h1>
+   
+  </header>
+
+  <nav>
+    <a href="index.html">Halaman Utama</a>
+    <a href="#komoditas">Komoditas</a>
+    <a href="#eksporimpor">Ekspor & Impor</a>
+    <a href="#dampak">Dampak</a>
+    <a href="#kesimpulan">Kesimpulan</a>
+  </nav>
+
+  <div class="container">
+    <!-- Section Tentang -->
+    <section id="tentang" class="card">
+      <h2>Tentang Kamboja dan Perdagangan Internasional</h2>
+      <p>
+        <strong>Kamboja</strong> adalah negara kerajaan di Asia Tenggara yang terletak di semenanjung Indochina.
+        Dengan populasi sekitar <strong>17 juta jiwa</strong>, Kamboja telah menjadi salah satu negara dengan
+        pertumbuhan ekonomi tercepat di kawasan ini.
+      </p>
+      <p>
+        Letak geografis Kamboja yang berbatasan dengan <strong>Thailand, Laos, Vietnam</strong>, serta memiliki
+        garis pantai di <strong>Teluk Thailand</strong> menjadikannya lokasi strategis untuk perdagangan regional
+        dan konektivitas dengan pasar global. Pelabuhan Otonom Sihanoukville menjadi gerbang utama perdagangan laut Kamboja.
+      </p>
+      <p>
+        Perdagangan internasional merupakan pilar utama perekonomian Kamboja, menyumbang lebih
+        dari <strong>60 persen produk domestik bruto</strong>. Sektor <strong>garmen dan tekstil</strong> menjadi tulang punggung
+        ekspor Kamboja ke <strong>Amerika Serikat dan Eropa</strong>, memanfaatkan preferensi tarif dari kebijakan
+        Everything But Arms Uni Eropa dan Generalized System of Preferences Amerika Serikat.
+      </p>
+      <img class="hero-image" src="https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1400&auto=format&fit=crop"
+           alt="Candi Angkor Wat, Ikon Wisata dan Warisan Dunia Kamboja">
+    </section>
+
+    <!-- Section Komoditas Ekspor -->
+    <section id="komoditas" class="card">
+      <h2>Komoditas Utama Ekspor Kamboja</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Pakaian Jadi dan Tekstil</h4>
+          <p>Ekspor terbesar Kamboja berupa kaos, kemeja, celana, jaket, dan pakaian dalam ke Amerika Serikat, Eropa, Jepang, dan Kanada.</p>
+        </div>
+        <div class="item">
+          <h4>Alas Kaki</h4>
+          <p>Kamboja merupakan salah satu produsen sepatu terkemuka di Asia Tenggara, mengekspor jutaan pasang sepatu olahraga dan sandal setiap tahun.</p>
+        </div>
+        <div class="item">
+          <h4>Beras Premium</h4>
+          <p>Beras Jasmine Kamboja dikenal berkualitas tinggi dan telah beberapa kali dinobatkan sebagai beras terbaik dunia.</p>
+        </div>
+        <div class="item">
+          <h4>Sepeda dan Komponen</h4>
+          <p>Industri perakitan sepeda Kamboja menjadi pemasok utama ke pasar Eropa dan Amerika dengan merek-merek ternama.</p>
+        </div>
+        <div class="item">
+          <h4>Karet Alam</h4>
+          <p>Perkebunan karet di provinsi timur laut Kamboja menghasilkan karet alam untuk industri ban global.</p>
+        </div>
+        <div class="item">
+          <h4>Buah-buahan dan Produk Pertanian</h4>
+          <p>Ekspor buah mangga, pisang, kelapa muda, jagung, dan singkong Kamboja ke China dan negara tetangga.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 45px;">Komoditas Utama Impor Kamboja</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Bahan Baku Tekstil</h4>
+          <p>Kain, benang, aksesoris, dan pewarna diimpor dari China, Vietnam, dan Thailand untuk industri garmen lokal.</p>
+        </div>
+        <div class="item">
+          <h4>Minyak Bumi dan Gas</h4>
+          <p>Kamboja mengimpor hampir seluruh kebutuhan bahan bakar minyak untuk transportasi, industri, dan pembangkit listrik.</p>
+        </div>
+        <div class="item">
+          <h4>Mesin dan Peralatan Industri</h4>
+          <p>Mesin jahit industri, peralatan pabrik, dan mesin konstruksi untuk mendukung sektor manufaktur.</p>
+        </div>
+        <div class="item">
+          <h4>Kendaraan Bermotor</h4>
+          <p>Mobil, sepeda motor, truk, dan suku cadang diimpor dari Jepang, Thailand, dan Korea Selatan.</p>
+        </div>
+        <div class="item">
+          <h4>Obat-obatan dan Alat Kesehatan</h4>
+          <p>Produk farmasi dan alat medis untuk memenuhi kebutuhan sistem kesehatan nasional.</p>
+        </div>
+        <div class="item">
+          <h4>Elektronik dan Telekomunikasi</h4>
+          <p>Ponsel, komputer, dan perangkat elektronik untuk konsumen dan sektor bisnis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Ekspor & Impor -->
+    <section id="eksporimpor" class="card">
+      <h2>Nilai Ekspor dan Impor Kamboja</h2>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Keterangan</th>
+              <th>Nilai</th>
+              <th>Keterangan Tambahan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Nilai Ekspor</strong></td>
+              <td class="highlight">US$ 23,5 Miliar</td>
+              <td>Didominasi pakaian jadi, alas kaki, dan beras</td>
+            </tr>
+            <tr>
+              <td><strong>Nilai Impor</strong></td>
+              <td class="highlight">US$ 30,2 Miliar</td>
+              <td>Didominasi bahan baku tekstil, mesin, dan minyak bumi</td>
+            </tr>
+            <tr>
+              <td><strong>Neraca Perdagangan</strong></td>
+              <td class="highlight">Defisit US$ 6,7 Miliar</td>
+              <td>Impor bahan baku lebih besar dari nilai ekspor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Negara Tujuan Ekspor Utama Kamboja</h3>
+      <ul class="country-list">
+        <li>Amerika Serikat</li>
+        <li>Jerman</li>
+        <li>Jepang</li>
+        <li>Inggris</li>
+        <li>China</li>
+        <li>Spanyol</li>
+        <li>Kanada</li>
+        <li>Prancis</li>
+      </ul>
+
+      <h3>Negara Asal Impor Utama Kamboja</h3>
+      <ul class="country-list">
+        <li>China</li>
+        <li>Thailand</li>
+        <li>Vietnam</li>
+        <li>Singapura</li>
+        <li>Jepang</li>
+        <li>Korea Selatan</li>
+      </ul>
+    </section>
+
+    <!-- Section Dampak -->
+    <section id="dampak" class="card">
+      <h2>Dampak Perdagangan Internasional bagi Kamboja</h2>
+      
+      <div class="dampak-grid">
+        <div class="dampak-positif">
+          <h3>Dampak Positif</h3>
+          <ul>
+            <li>Pertumbuhan ekonomi tinggi rata-rata 7 persen per tahun sebelum pandemi</li>
+            <li>Menciptakan lapangan kerja bagi lebih dari 800.000 pekerja di sektor garmen</li>
+            <li>Mengurangi angka kemiskinan dari 50 persen pada tahun 2004 menjadi sekitar 18 persen pada tahun 2024</li>
+            <li>Meningkatkan investasi asing langsung dari China, Jepang, dan Korea Selatan</li>
+            <li>Memperkuat cadangan devisa negara menjadi lebih dari 20 miliar dolar AS</li>
+            <li>Mendorong pembangunan infrastruktur seperti pelabuhan Sihanoukville</li>
+            <li>Transfer teknologi dan peningkatan keterampilan tenaga kerja lokal</li>
+            <li>Memperkuat hubungan diplomatik dan kerjasama regional di ASEAN</li>
+          </ul>
+        </div>
+        <div class="dampak-negatif">
+          <h3>Dampak Negatif</h3>
+          <ul>
+            <li>Ketergantungan ekonomi yang tinggi pada sektor tekstil dan garmen</li>
+            <li>Rentan terhadap kebijakan tarif dan preferensi perdagangan dari negara maju</li>
+            <li>Kondisi kerja dan upah buruh pabrik masih menjadi sorotan internasional</li>
+            <li>Ketergantungan impor bahan baku lebih dari 70 persen dari China</li>
+            <li>Fluktuasi harga komoditas global mempengaruhi stabilitas ekonomi</li>
+            <li>Persaingan ketat dengan negara tetangga seperti Vietnam dan Bangladesh</li>
+            <li>Dampak lingkungan dari industrialisasi yang pesat</li>
+            <li>Rentan terhadap krisis global seperti pandemi atau resesi ekonomi</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Kesimpulan -->
+    <section id="kesimpulan" class="card">
+      <h2>Kesimpulan</h2>
+      <p>
+        <strong>Kamboja</strong> merupakan salah satu negara berkembang di Asia Tenggara yang berhasil
+        memanfaatkan <strong>perdagangan internasional</strong> sebagai mesin pertumbuhan ekonomi.
+        Dengan keunggulan kompetitif berupa biaya tenaga kerja yang relatif rendah
+        dan preferensi tarif dari negara maju, sektor garmen dan tekstil Kamboja
+        berkembang sangat pesat menjadi tulang punggung ekspor nasional.
+      </p>
+      <p>
+        Namun, tantangan besar masih dihadapi Kamboja, terutama <strong>ketergantungan pada
+        satu sektor ekspor</strong> dan impor bahan baku. Untuk keberlanjutan jangka panjang,
+        Kamboja perlu melakukan diversifikasi ekonomi ke sektor pariwisata, pertanian
+        bernilai tambah, dan industri pengolahan lainnya.
+      </p>
+      <p>
+        Dengan dukungan investasi asing yang terus mengalir, keanggotaan aktif di <strong>ASEAN,
+        WTO, dan RCEP</strong>, serta akses pasar preferensial dari negara maju, Kamboja memiliki
+        prospek cerah untuk terus meningkatkan daya saing perdagangan internasional
+        dan mencapai status <strong>negara berpendapatan menengah ke atas pada tahun 2030</strong>.
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <p>Artikel Perdagangan Internasional Kamboja</p>
+    <p>Sumber: Bank Dunia, IMF, Kementerian Perdagangan Kamboja, World Trade Organization</p>
+    <p>Kerajaan Kamboja - Tahun 2026</p>
+  </footer>
+
+</body>
+</html>

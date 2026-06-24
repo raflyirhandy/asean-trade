@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laos - Perdagangan Internasional</title>
+  
+  <!-- Google Fonts untuk font yang lebih hidup dan menarik -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', 'Quicksand', 'Segoe UI', sans-serif;
+    }
+
+    /* Header dengan efek gradasi */
+    header {
+      background: linear-gradient(135deg, #ce1126, #002868, #ce1126);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Efek overlay pada header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-size: 56px;
+      margin-bottom: 15px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      font-size: 22px;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.95;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigasi Sticky */
+    nav {
+      background: rgba(0, 40, 104, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+    }
+
+    nav a:hover {
+      background: #ce1126;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    nav a:first-child {
+      background: #ce1126;
+    }
+
+    nav a:first-child:hover {
+      background: #ffd700;
+      color: #002868;
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 50px auto;
+    }
+
+    /* Card dengan efek modern */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 45px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+    }
+
+    h2 {
+      color: #002868;
+      margin-bottom: 25px;
+      border-left: 6px solid #ce1126;
+      padding-left: 20px;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      color: #002868;
+      margin: 30px 0 15px 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    p {
+      line-height: 1.9;
+      color: #444;
+      margin-bottom: 18px;
+      text-align: justify;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+    /* Gambar tidak terpotong */
+    .hero-image {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      margin-top: 30px;
+      display: block;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .hero-image:hover {
+      transform: scale(1.02);
+    }
+
+    /* Grid Komoditas */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 25px;
+    }
+
+    .item {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      padding: 28px;
+      border-radius: 20px;
+      border-top: 5px solid #ce1126;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    .item h4 {
+      color: #ce1126;
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .item p {
+      font-size: 14px;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* Tabel */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    table th {
+      background: linear-gradient(135deg, #002868, #003a9e);
+      color: white;
+      padding: 16px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    table td {
+      padding: 14px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    table tr:hover {
+      background: #e8f0fe;
+      transition: 0.2s;
+    }
+
+    .highlight {
+      color: #ce1126;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* List Styling */
+    ul {
+      margin-left: 25px;
+      margin-top: 10px;
+    }
+
+    li {
+      margin: 12px 0;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .country-list {
+      list-style: none;
+      margin-left: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .country-list li {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #f1f5f9, #ffffff);
+      border-radius: 40px;
+      margin: 5px;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+    }
+
+    .country-list li:hover {
+      background: #ce1126;
+      color: white;
+      transform: translateX(3px);
+    }
+
+    /* Dampak Grid */
+    .dampak-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 25px;
+    }
+
+    .dampak-positif {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #2e7d32;
+    }
+
+    .dampak-negatif {
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #c62828;
+    }
+
+    .dampak-positif h3, .dampak-negatif h3 {
+      margin-top: 0;
+      font-weight: 700;
+    }
+
+    .dampak-positif li, .dampak-negatif li {
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #001538, #002868);
+      color: #cbd5e1;
+      text-align: center;
+      padding: 45px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      text-align: center;
+      margin: 12px 0;
+      color: #cbd5e1;
+    }
+
+    footer p:first-child {
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 36px;
+      }
+      header p {
+        font-size: 16px;
+      }
+      nav a {
+        margin: 5px;
+        font-size: 12px;
+        padding: 6px 14px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .card {
+        padding: 25px;
+      }
+      .dampak-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Perdagangan Internasional Laos</h1>
+    
+  </header>
+
+  <nav>
+    <a href="index.html">Halaman Utama</a>
+    <a href="#komoditas">Komoditas</a>
+    <a href="#eksporimpor">Ekspor & Impor</a>
+    <a href="#dampak">Dampak</a>
+    <a href="#kesimpulan">Kesimpulan</a>
+  </nav>
+
+  <div class="container">
+    <!-- Section Tentang -->
+    <section id="tentang" class="card">
+      <h2>Tentang Laos dan Perdagangan Internasional</h2>
+      <p>
+        <strong>Laos</strong> adalah negara di Asia Tenggara yang tidak memiliki wilayah laut atau yang dikenal
+        dengan istilah <strong>landlocked country</strong>. Negara ini berbatasan dengan <strong>Thailand, Myanmar, China,
+        Vietnam, dan Kamboja</strong>. Laos dikenal dengan kekayaan sumber daya alam serta potensi energi air yang besar.
+      </p>
+      <p>
+        Letak geografis Laos yang berada di jantung Asia Tenggara menjadikannya sebagai pusat
+        konektivitas regional, terutama dengan pembangunan <strong>jalur kereta api Laos-China</strong> yang
+        menghubungkan Vientiane ke Kunming. Proyek ini membuka peluang besar bagi Laos untuk
+        meningkatkan perdagangan dengan China dan kawasan Asia Tengah.
+      </p>
+      <p>
+        Perekonomian Laos didukung oleh sektor pertanian, pertambangan, pembangkit listrik tenaga air,
+        dan perdagangan internasional. Perdagangan internasional menyumbang bagian penting dari
+        produk domestik bruto Laos, dengan <strong>Thailand, China, dan Vietnam</strong> sebagai mitra dagang utama.
+        Laos dijuluki sebagai <strong>Baterai Asia Tenggara</strong> karena kemampuannya mengekspor listrik tenaga air
+        ke negara-negara tetangga.
+      </p>
+      <img class="hero-image" src="https://images.unsplash.com/photo-1563492065599-3520f775eeed?q=80&w=1400&auto=format&fit=crop"
+           alt="Patuxai Monument, Ikon Wisata Laos">
+    </section>
+
+    <!-- Section Komoditas Ekspor -->
+    <section id="komoditas" class="card">
+      <h2>Komoditas Utama Ekspor Laos</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Energi Listrik Tenaga Air</h4>
+          <p>Laos dijuluki sebagai Baterai Asia Tenggara karena ekspor listrik dari pembangkit listrik tenaga air ke Thailand, Vietnam, dan Kamboja.</p>
+        </div>
+        <div class="item">
+          <h4>Tembaga</h4>
+          <p>Pertambangan tembaga menjadi salah satu sumber ekspor penting Laos, terutama ke China dan negara tetangga.</p>
+        </div>
+        <div class="item">
+          <h4>Emas</h4>
+          <p>Laos memiliki cadangan emas yang cukup besar dan menjadi komoditas ekspor unggulan ke pasar internasional.</p>
+        </div>
+        <div class="item">
+          <h4>Kayu dan Produk Kehutanan</h4>
+          <p>Laos mengekspor kayu dan hasil hutan ke negara-negara tetangga meskipun telah ada pembatasan untuk pelestarian hutan.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Pertanian</h4>
+          <p>Beras, kopi, jagung, singkong, dan karet menjadi komoditas ekspor pertanian Laos ke pasar regional.</p>
+        </div>
+        <div class="item">
+          <h4>Garam dan Mineral Lainnya</h4>
+          <p>Laos juga mengekspor garam, gipsum, dan batubara untuk kebutuhan industri di negara tetangga.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 45px;">Komoditas Utama Impor Laos</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Mesin dan Peralatan Industri</h4>
+          <p>Digunakan untuk mendukung pembangunan infrastruktur dan industri nasional yang terus berkembang.</p>
+        </div>
+        <div class="item">
+          <h4>Bahan Bakar Minyak</h4>
+          <p>Laos mengimpor hampir seluruh kebutuhan bahan bakar untuk transportasi, industri, dan pembangkit listrik cadangan.</p>
+        </div>
+        <div class="item">
+          <h4>Kendaraan Bermotor</h4>
+          <p>Mobil, sepeda motor, truk, dan suku cadang kendaraan diimpor dari Thailand, China, dan Jepang.</p>
+        </div>
+        <div class="item">
+          <h4>Elektronik dan Peralatan Listrik</h4>
+          <p>Produk elektronik seperti ponsel, komputer, dan televisi diimpor untuk memenuhi kebutuhan masyarakat.</p>
+        </div>
+        <div class="item">
+          <h4>Baja dan Bahan Konstruksi</h4>
+          <p>Semen, besi, baja, dan bahan bangunan lainnya diimpor untuk proyek pembangunan infrastruktur.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Kimia dan Obat-obatan</h4>
+          <p>Bahan kimia industri, pupuk, dan produk farmasi diimpor untuk sektor kesehatan dan pertanian.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Ekspor & Impor -->
+    <section id="eksporimpor" class="card">
+      <h2>Nilai Ekspor dan Impor Laos</h2>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Keterangan</th>
+              <th>Nilai</th>
+              <th>Keterangan Tambahan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Nilai Ekspor</strong></td>
+              <td class="highlight">US$ 8,2 Miliar</td>
+              <td>Didominasi energi listrik, tembaga, emas, dan produk pertanian</td>
+            </tr>
+            <tr>
+              <td><strong>Nilai Impor</strong></td>
+              <td class="highlight">US$ 7,1 Miliar</td>
+              <td>Didominasi mesin, bahan bakar, kendaraan, dan elektronik</td>
+            </tr>
+            <tr>
+              <td><strong>Neraca Perdagangan</strong></td>
+              <td class="highlight">Surplus US$ 1,1 Miliar</td>
+              <td>Ekspor lebih besar dibandingkan impor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Negara Tujuan Ekspor Utama Laos</h3>
+      <ul class="country-list">
+        <li>Thailand</li>
+        <li>China</li>
+        <li>Vietnam</li>
+        <li>Jepang</li>
+        <li>Korea Selatan</li>
+        <li>India</li>
+      </ul>
+
+      <h3>Negara Asal Impor Utama Laos</h3>
+      <ul class="country-list">
+        <li>Thailand</li>
+        <li>China</li>
+        <li>Vietnam</li>
+        <li>Jepang</li>
+        <li>Malaysia</li>
+        <li>Singapura</li>
+      </ul>
+    </section>
+
+    <!-- Section Dampak -->
+    <section id="dampak" class="card">
+      <h2>Dampak Perdagangan Internasional bagi Laos</h2>
+      
+      <div class="dampak-grid">
+        <div class="dampak-positif">
+          <h3>Dampak Positif</h3>
+          <ul>
+            <li>Meningkatkan pendapatan negara dari sektor ekspor energi listrik</li>
+            <li>Mendorong pembangunan infrastruktur seperti bendungan dan jalur kereta api</li>
+            <li>Membuka lapangan pekerjaan di sektor pertambangan dan konstruksi</li>
+            <li>Meningkatkan kerja sama regional di ASEAN dan sub kawasan Mekong</li>
+            <li>Mendorong pertumbuhan sektor energi dan pertambangan secara signifikan</li>
+            <li>Memperkuat hubungan diplomatik dengan negara tetangga</li>
+            <li>Meningkatkan investasi asing langsung di sektor energi dan infrastruktur</li>
+          </ul>
+        </div>
+        <div class="dampak-negatif">
+          <h3>Dampak Negatif</h3>
+          <ul>
+            <li>Ketergantungan yang tinggi terhadap ekspor sumber daya alam</li>
+            <li>Fluktuasi harga komoditas dunia mempengaruhi stabilitas ekonomi Laos</li>
+            <li>Ketergantungan impor terhadap mesin, teknologi, dan bahan bakar</li>
+            <li>Persaingan perdagangan internasional yang semakin tinggi</li>
+            <li>Dampak lingkungan dari pembangunan bendungan dan pertambangan</li>
+            <li>Keterbatasan akses ke pelabuhan laut karena tidak memiliki wilayah laut</li>
+            <li>Rentan terhadap perubahan kebijakan perdagangan negara tetangga</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Kesimpulan -->
+    <section id="kesimpulan" class="card">
+      <h2>Kesimpulan</h2>
+      <p>
+        <strong>Laos</strong> merupakan negara berkembang di Asia Tenggara yang memiliki potensi besar dalam sektor
+        energi listrik tenaga air, pertambangan, dan pertanian. Dijuluki sebagai <strong>Baterai Asia Tenggara</strong>,
+        Laos berhasil memanfaatkan sumber daya airnya untuk menghasilkan listrik yang diekspor ke
+        negara tetangga seperti Thailand, Vietnam, dan Kamboja.
+      </p>
+      <p>
+        Perdagangan internasional memberikan dampak penting terhadap pertumbuhan ekonomi dan pembangunan
+        nasional Laos. <strong>Surplus perdagangan</strong> yang dicapai Laos menunjukkan kinerja ekspor yang baik,
+        terutama dari sektor energi listrik dan pertambangan. Ke depan, Laos perlu terus melakukan
+        diversifikasi ekonomi untuk mengurangi ketergantungan pada sumber daya alam.
+      </p>
+      <p>
+        Dengan sumber daya alam yang melimpah dan posisi strategis di jantung Asia Tenggara, Laos
+        memiliki peluang besar untuk terus meningkatkan perdagangan internasional di masa depan.
+        Proyek <strong>kereta api Laos-China</strong> menjadi faktor penting yang akan membuka akses pasar lebih luas
+        bagi produk-produk Laos ke kawasan Asia dan dunia.
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <p>Artikel Perdagangan Internasional Laos</p>
+    <p>Sumber: Bank Dunia, IMF, Kementerian Perindustrian dan Perdagangan Laos, ASEAN Secretariat</p>
+    <p>Republik Demokratik Rakyat Laos - Tahun 2026</p>
+  </footer>
+
+</body>
+</html>

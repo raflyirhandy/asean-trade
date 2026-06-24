@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASEAN Trade - Perdagangan Negara Asia Tenggara</title>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f4f8 0%, #e9edf2 100%);
+      color: #1a2a3a;
+      line-height: 1.6;
+    }
+
+    /* TRANSITION OVERLAY */
+    .page-transition {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #001f54, #d90429);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .page-transition.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-top: 5px solid white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* NAVBAR DENGAN GRADASI GERAK */
+    nav {
+      background: linear-gradient(135deg, #001f54, #d90429, #001f54, #d90429);
+      background-size: 300% 300%;
+      animation: gradientNavMove 8s ease infinite;
+      padding: 18px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+    }
+    @keyframes gradientNavMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .logo:hover { transform: scale(1.02); }
+
+    .menu {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+      padding: 8px 0;
+      font-size: 16px;
+      cursor: pointer;
+      position: relative;
+    }
+    .menu a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #ffd60a;
+      transition: width 0.3s ease;
+    }
+    .menu a:hover::after { width: 100%; }
+    .menu a:hover {
+      color: #ffd60a;
+      transform: translateY(-2px);
+    }
+
+    /* HEADER DENGAN GRADASI WARNA ASLI */
+    header {
+      background: linear-gradient(135deg, #001f54, #d90429);
+      color: white;
+      text-align: center;
+      padding: 90px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat bottom;
+      background-size:cover;
+      pointer-events:none;
+    }
+    header h1 {
+      font-size: 58px;
+      margin-bottom: 25px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+    header p {
+      font-size: 20px;
+      max-width: 900px;
+      margin: auto;
+      line-height: 1.8;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+      color: rgba(255,255,255,0.95);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1300px;
+      margin: 50px auto;
+    }
+
+    /* CARD DENGAN EFEK */
+    .card {
+      background: white;
+      padding: 45px;
+      border-radius: 24px;
+      margin-bottom: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+    }
+
+    /* TUJUAN PEMBELAJARAN & CAPAIAN - GRADASI GERAK */
+    .learning-card {
+      background: linear-gradient(135deg, #ffffff, #fef9f0);
+      border-radius: 28px;
+      padding: 45px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(217,4,41,0.2);
+    }
+    .learning-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #001f54, #d90429, #ffd60a, #001f54);
+      background-size: 300% 100%;
+      animation: borderMove 4s linear infinite;
+    }
+    @keyframes borderMove {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
+    }
+    .learning-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 20px;
+    }
+    .learning-box {
+      background: linear-gradient(135deg, #f8fafc, #ffffff);
+      padding: 28px;
+      border-radius: 24px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      border-left: 5px solid #d90429;
+    }
+    .learning-box:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #ffffff, #fff5f5);
+    }
+    .learning-box h3 {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #001f54, #d90429);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+      display: inline-block;
+      border-bottom: 3px solid #ffd60a;
+      padding-bottom: 8px;
+    }
+    .learning-list {
+      list-style: none;
+      margin-top: 15px;
+    }
+    .learning-list li {
+      margin-bottom: 16px;
+      padding-left: 28px;
+      position: relative;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #2d3e50;
+    }
+    .learning-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #d90429;
+      font-weight: 800;
+      font-size: 18px;
+      background: linear-gradient(135deg, #001f54, #d90429);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .badge-asean {
+      display: inline-block;
+      background: linear-gradient(135deg, #001f54, #d90429);
+      padding: 6px 18px;
+      border-radius: 40px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      letter-spacing: 0.3px;
+    }
+
+    h2 {
+      color: #001f54;
+      margin-bottom: 25px;
+      border-left: 6px solid #d90429;
+      padding-left: 20px;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    p {
+      margin-top: 15px;
+      font-size: 18px;
+      line-height: 1.9;
+      color: #4b5563;
+      text-align: justify;
+    }
+    .map-container {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+    .map-container img {
+      width: 100%;
+      display: block;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+    .country-link {
+      position: absolute;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 700;
+      transition: 0.3s;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.3), 0px 0px 8px rgba(255,255,255,0.9);
+      letter-spacing: 0.3px;
+      cursor: pointer;
+    }
+    .country-link:hover { transform: scale(1.08); }
+    .myanmar{ top:19%; left:4%; color:#ff5e57; }
+    .thailand{ top:44%; left:4%; color:#1e50a2; }
+    .malaysia{ top:64%; left:6%; color:#1f9d55; }
+    .singapore{ bottom:11%; left:7%; color:#ff6b35; }
+    .vietnam{ top:11%; left:41%; color:#11823b; }
+    .laos{ top:28%; left:43%; color:#1d4ed8; }
+    .cambodia{ top:44%; left:43%; color:#7b1fa2; }
+    .philippines{ top:46%; right:23%; color:#d63384; }
+    .brunei{ top:62.5%; right:24%; color:#d97706; }
+    .indonesia{ bottom:24%; right:4.5%; color:#e11d48; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+    .item {
+      background: linear-gradient(135deg, #fafcff, #ffffff);
+      padding: 28px;
+      border-radius: 18px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.04);
+      border-top: 4px solid #d90429;
+      cursor: pointer;
+    }
+    .item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #ffffff, #fff0f0);
+    }
+    .item h3 { 
+      margin-bottom: 14px; 
+      color: #001f54; 
+      font-size: 22px; 
+      font-weight: 700;
+    }
+    .item p { font-size: 15px; line-height: 1.7; margin-top: 0; }
+
+    footer {
+      background: linear-gradient(135deg, #001538, #001f54);
+      color: white;
+      padding: 55px 45px 35px;
+      margin-top: 55px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-col h3 {
+      margin-bottom: 18px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffd60a;
+    }
+    footer p, footer li { color: rgba(255,255,255,0.85); font-size: 15px; }
+    footer a { color: rgba(255,255,255,0.85); text-decoration: none; transition: 0.3s; }
+    footer a:hover { color: #ffd60a; }
+    .contact-info a { color: #ffd60a; font-weight: 600; }
+    .copyright {
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 20px;
+      margin-top: 20px;
+      opacity: 0.7;
+      font-size: 14px;
+    }
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; flex-direction: column; gap: 15px; }
+      .menu { gap: 20px; justify-content: center; }
+      header h1 { font-size: 36px; }
+      h2 { font-size: 26px; }
+      .learning-grid { grid-template-columns: 1fr; gap: 25px; }
+      .learning-box h3 { font-size: 24px; }
+      .country-link { font-size: 10px; }
+      .card { padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="pageTransition" class="page-transition">
+  <div class="spinner"></div>
+</div>
+
+<nav>
+  <div class="logo" onclick="navigateTo('index.html')">ASEAN TRADE</div>
+  <div class="menu">
+    <a href="javascript:void(0)" onclick="navigateTo('index.html')">Beranda</a>
+    <a href="javascript:void(0)" onclick="navigateTo('#negara-asean')">Negara ASEAN</a>
+    <a href="javascript:void(0)" onclick="navigateTo('kurs.html')">Kurs</a>
+    <a href="javascript:void(0)" onclick="navigateTo('statistik.html')">Statistik</a>
+    <a href="javascript:void(0)" onclick="navigateTo('trade-quiz.html')">Trade Quiz</a>
+  </div>
+</nav>
+
+<header id="beranda">
+  <h1>Perdagangan Negara-Negara Asia Tenggara</h1>
+  
+</header>
+
+<div class="container">
+  
+  <!-- TUJUAN PEMBELAJARAN & CAPAIAN PEMBELAJARAN -->
+  <div class="learning-card">
+    <span class="badge-asean">MATERI PEMBELAJARAN : PERDAGANGAN ASEAN</span>
+    <div class="learning-grid">
+      <!-- Tujuan Pembelajaran -->
+      <div class="learning-box">
+        <h3>Tujuan Pembelajaran</h3>
+        <ul class="learning-list">
+          <li>Memahami konsep dasar perdagangan internasional di kawasan Asia Tenggara (ASEAN).</li>
+          <li>Menganalisis komoditas unggulan dan potensi ekspor dari 10 negara ASEAN.</li>
+          <li>Menjelaskan faktor-faktor yang mempengaruhi kurs mata uang dan dampaknya terhadap perdagangan.</li>
+          <li>Menginterpretasikan data statistik perdagangan (ekspor, impor, neraca) negara-negara ASEAN.</li>
+          <li>Menggunakan kalkulator kurs untuk simulasi konversi mata uang dalam transaksi perdagangan.</li>
+        </ul>
+      </div>
+      <!-- Capaian Pembelajaran -->
+      <div class="learning-box">
+        <h3>Capaian Pembelajaran</h3>
+        <ul class="learning-list">
+          <li>Mahasiswa atau peserta didik mampu mengidentifikasi 10 negara ASEAN dan komoditas utama masing-masing.</li>
+          <li>Mampu membedakan dampak apresiasi dan depresiasi kurs terhadap eksportir dan importir.</li>
+          <li>Mampu membaca dan menafsirkan data statistik perdagangan ASEAN (total ekspor, ranking, tren tahunan).</li>
+          <li>Mampu melakukan konversi nilai tukar antar mata uang ASEAN dengan menggunakan data kurs terkini.</li>
+          <li>Mampu menyimpulkan hubungan antara nilai tukar, neraca perdagangan, dan daya saing ekonomi regional.</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 28px; font-size: 15px; background: #f0f2f5; padding: 12px 20px; border-radius: 20px; text-align: center; color: #001f54;">
+      <strong>Materi Inti:</strong> Perdagangan 10 Negara ASEAN, Kurs Mata Uang, Statistik Ekspor-Impor, dan Simulasi Ekonomi.
+    </p>
+  </div>
+
+  <!-- PETA ASEAN -->
+  <section id="negara-asean" class="card">
+    <h2>Peta 10 Negara Asia Tenggara</h2>
+    <p>Klik nama negara pada peta di bawah ini untuk membuka halaman perdagangan internasional masing-masing negara. Setiap negara memiliki keunggulan dan komoditas unggulan yang berbeda.</p>
+    <div class="map-container">
+      <img src="img/asean-maps.png" alt="Peta ASEAN" onerror="this.src='https://placehold.co/1100x700/eef2f6/1a2a3a?text=Peta+ASEAN+10+Negara'; this.onerror=null;">
+      <a class="country-link myanmar" href="myanmar.html">Myanmar</a>
+      <a class="country-link thailand" href="thailand.html">Thailand</a>
+      <a class="country-link malaysia" href="malaysia.html">Malaysia</a>
+      <a class="country-link singapore" href="singapura.html">Singapura</a>
+      <a class="country-link vietnam" href="vietnam.html">Vietnam</a>
+      <a class="country-link laos" href="laos.html">Laos</a>
+      <a class="country-link cambodia" href="kamboja.html">Kamboja</a>
+      <a class="country-link philippines" href="filipina.html">Filipina</a>
+      <a class="country-link brunei" href="brunei.html">Brunei</a>
+      <a class="country-link indonesia" href="indonesia.html">Indonesia</a>
+    </div>
+  </section>
+
+  <!-- TENTANG PERDAGANGAN ASIA TENGGARA -->
+  <section id="tentang" class="card">
+    <h2>Tentang Perdagangan Asia Tenggara</h2>
+    <p>Kawasan Asia Tenggara merupakan salah satu pusat perdagangan internasional yang berkembang pesat di dunia. Negara-negara ASEAN memiliki posisi strategis yang menghubungkan Samudra Pasifik dan Samudra Hindia, menjadikannya jalur perdagangan global yang sangat penting.</p>
+    <p>Negara-negara ASEAN memiliki hubungan perdagangan yang kuat dengan China, Amerika Serikat, Jepang, Korea Selatan, dan Uni Eropa. Kerjasama regional melalui ASEAN Free Trade Area (AFTA) dan berbagai perjanjian perdagangan bebas semakin memperkuat integrasi ekonomi kawasan ini.</p>
+    <div class="grid">
+      <div class="item">
+        <h3>Sumber Daya Alam</h3>
+        <p>Indonesia, Malaysia, dan Brunei Darussalam unggul dalam sektor energi seperti minyak bumi, gas alam, dan kelapa sawit yang menjadi komoditas ekspor utama ke pasar global.</p>
+      </div>
+      <div class="item">
+        <h3>Industri Teknologi</h3>
+        <p>Singapura, Malaysia, dan Vietnam berkembang pesat dalam sektor elektronik, semikonduktor, dan teknologi informasi dengan kualitas yang diakui dunia.</p>
+      </div>
+      <div class="item">
+        <h3>Industri Otomotif</h3>
+        <p>Thailand menjadi salah satu pusat produksi kendaraan terbesar di Asia Tenggara, mengekspor mobil, truk, dan suku cadang ke berbagai negara.</p>
+      </div>
+      <div class="item">
+        <h3>Sektor Pertanian</h3>
+        <p>Vietnam, Myanmar, Laos, Kamboja, dan Thailand memiliki sektor pertanian yang kuat dengan komoditas unggulan seperti beras, kopi, karet, dan buah-buahan tropis.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KOMODITAS UTAMA 10 NEGARA ASEAN -->
+  <section class="card">
+    <h2>Komoditas Utama 10 Negara ASEAN</h2>
+    <div class="grid">
+      <div class="item"><h3>Indonesia</h3><p>Kelapa sawit, batu bara, nikel, gas alam, dan produk manufaktur otomotif.</p></div>
+      <div class="item"><h3>Malaysia</h3><p>Elektronik, semikonduktor, minyak sawit, minyak bumi, dan gas alam.</p></div>
+      <div class="item"><h3>Singapura</h3><p>Elektronik, produk kimia, jasa keuangan, teknologi, dan produk farmasi.</p></div>
+      <div class="item"><h3>Thailand</h3><p>Kendaraan otomotif, elektronik, beras, karet alam, dan produk pertanian.</p></div>
+      <div class="item"><h3>Vietnam</h3><p>Elektronik, tekstil, pakaian jadi, kopi, beras, dan produk perikanan.</p></div>
+      <div class="item"><h3>Filipina</h3><p>Semikonduktor, komponen elektronik, kelapa, pisang, dan produk perikanan.</p></div>
+      <div class="item"><h3>Brunei</h3><p>Minyak bumi, gas alam cair, dan produk petrokimia.</p></div>
+      <div class="item"><h3>Kamboja</h3><p>Tekstil, pakaian jadi, alas kaki, beras, dan karet alam.</p></div>
+      <div class="item"><h3>Laos</h3><p>Energi listrik tenaga air, tembaga, emas, kayu, dan produk pertanian.</p></div>
+      <div class="item"><h3>Myanmar</h3><p>Gas alam, produk pertanian, batu permata, kayu jati, dan produk perikanan.</p></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>ASEAN TRADE</h3>
+      <p>Platform informasi perdagangan negara-negara Asia Tenggara yang akurat dan terpercaya. Menyajikan data ekspor, impor, dan komoditas unggulan 10 negara ASEAN.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Navigasi</h3>
+      <ul>
+        <li><a href="javascript:void(0)" onclick="navigateTo('index.html')">Beranda</a></li>
+        <li><a href="javascript:void(0)" onclick="navigateTo('#negara-asean')">Negara ASEAN</a></li>
+        <li><a href="javascript:void(0)" onclick="navigateTo('kurs.html')">Kurs Mata Uang</a></li>
+        <li><a href="javascript:void(0)" onclick="navigateTo('statistik.html')">Statistik Perdagangan</a></li>
+        <li><a href="javascript:void(0)" onclick="navigateTo('trade-quiz.html')">Trade Quiz</a></li>
+        <li><a href="javascript:void(0)" onclick="navigateTo('#tentang')">Tentang Kami</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Sumber Data</h3>
+      <ul>
+        <li>Bank Dunia (World Bank)</li>
+        <li>Dana Moneter Internasional (IMF)</li>
+        <li>Sekretariat ASEAN</li>
+        <li>World Trade Organization (WTO)</li>
+        <li>Kementerian Perdagangan Negara ASEAN</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Kontak Kami</h3>
+      <div class="contact-info">
+        <p>Email: <a href="mailto:shafirahilda44@gmail.com">shafirahilda44@gmail.com</a></p>
+        <p>Telepon: <a href="tel:+6285520764506">+62 855-2076-4506</a></p>
+        <p>Alamat: Kuningan, Jawa Barat</p>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">
+    © 2026 ASEAN Trade. All rights reserved. | Portal Perdagangan Internasional Asia Tenggara
+  </div>
+</footer>
+
+<script>
+  function navigateTo(page) {
+    if (page === 'trade-quiz.html') {
+      window.location.href = 'trade-quiz.html';
+      return;
+    }
+    if (page.startsWith('#')) {
+      const targetId = page.substring(1);
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        document.getElementById('beranda')?.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+    const transition = document.getElementById('pageTransition');
+    transition.classList.add('active');
+    setTimeout(() => {
+      window.location.href = page;
+    }, 250);
+  }
+
+  document.querySelectorAll('.country-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      if (href && href !== '#') {
+        navigateTo(href);
+      }
+    });
+  });
+
+  document.querySelectorAll('.menu a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const targetId = href.substring(1);
+        const target = document.getElementById(targetId);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malaysia - Perdagangan Internasional</title>
+  
+  <!-- Google Fonts untuk font yang lebih hidup dan menarik -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', 'Quicksand', 'Segoe UI', sans-serif;
+    }
+
+    /* Header dengan efek gradasi */
+    header {
+      background: linear-gradient(135deg, #012169, #cc0001, #012169);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Efek overlay pada header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-size: 56px;
+      margin-bottom: 15px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      font-size: 22px;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.95;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigasi Sticky */
+    nav {
+      background: rgba(0, 31, 84, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+    }
+
+    nav a:hover {
+      background: #cc0001;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    nav a:first-child {
+      background: #cc0001;
+    }
+
+    nav a:first-child:hover {
+      background: #ffd60a;
+      color: #001f54;
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 50px auto;
+    }
+
+    /* Card dengan efek modern */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 45px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+    }
+
+    h2 {
+      color: #001f54;
+      margin-bottom: 25px;
+      border-left: 6px solid #cc0001;
+      padding-left: 20px;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      color: #001f54;
+      margin: 30px 0 15px 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    p {
+      line-height: 1.9;
+      color: #444;
+      margin-bottom: 18px;
+      text-align: justify;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+    /* Gambar dengan efek - TIDAK TERPOTONG */
+    .hero-image {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      margin-top: 30px;
+      display: block;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .hero-image:hover {
+      transform: scale(1.02);
+    }
+
+    /* Grid Komoditas */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 25px;
+    }
+
+    .item {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      padding: 28px;
+      border-radius: 20px;
+      border-top: 5px solid #cc0001;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    .item h4 {
+      color: #cc0001;
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .item p {
+      font-size: 14px;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* Tabel */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    table th {
+      background: linear-gradient(135deg, #001f54, #001538);
+      color: white;
+      padding: 16px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    table td {
+      padding: 14px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    table tr:hover {
+      background: #ffe0e0;
+      transition: 0.2s;
+    }
+
+    .highlight {
+      color: #cc0001;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* List Styling */
+    ul {
+      margin-left: 25px;
+      margin-top: 10px;
+    }
+
+    li {
+      margin: 12px 0;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .country-list {
+      list-style: none;
+      margin-left: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .country-list li {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #f1f5f9, #ffffff);
+      border-radius: 40px;
+      margin: 5px;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+    }
+
+    .country-list li:hover {
+      background: #cc0001;
+      color: white;
+      transform: translateX(3px);
+    }
+
+    /* Dampak Grid */
+    .dampak-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 25px;
+    }
+
+    .dampak-positif {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #2e7d32;
+    }
+
+    .dampak-negatif {
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #c62828;
+    }
+
+    .dampak-positif h3, .dampak-negatif h3 {
+      margin-top: 0;
+      font-weight: 700;
+    }
+
+    .dampak-positif li, .dampak-negatif li {
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #001f54, #001538);
+      color: #cbd5e1;
+      text-align: center;
+      padding: 45px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      text-align: center;
+      margin: 12px 0;
+      color: #cbd5e1;
+    }
+
+    footer p:first-child {
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 36px;
+      }
+      header p {
+        font-size: 16px;
+      }
+      nav a {
+        margin: 5px;
+        font-size: 12px;
+        padding: 6px 14px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .card {
+        padding: 25px;
+      }
+      .dampak-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Perdagangan Internasional Malaysia</h1>
+   
+  </header>
+
+  <nav>
+    <a href="index.html">Halaman Utama</a>
+    <a href="#komoditas">Komoditas</a>
+    <a href="#eksporimpor">Ekspor & Impor</a>
+    <a href="#dampak">Dampak</a>
+    <a href="#kesimpulan">Kesimpulan</a>
+  </nav>
+
+  <div class="container">
+    <!-- Section Tentang -->
+    <section id="tentang" class="card">
+      <h2>Tentang Malaysia dan Perdagangan Internasional</h2>
+      <p>
+        <strong>Malaysia</strong> adalah salah satu negara di kawasan Asia Tenggara yang memiliki
+        perekonomian maju dan berkembang pesat. Negara ini terkenal sebagai pusat
+        perdagangan, industri elektronik, dan penghasil minyak sawit terbesar di dunia.
+      </p>
+      <p>
+        Letak geografis Malaysia yang strategis, terutama <strong>Selat Malaka</strong> yang menjadi
+        jalur perdagangan internasional tersibuk di dunia, membuat negara ini menjadi
+        pusat logistik dan perdagangan regional. Malaysia memiliki hubungan perdagangan
+        dengan banyak negara seperti <strong>China, Singapura, Amerika Serikat, Jepang, dan Indonesia</strong>.
+      </p>
+      <p>
+        Perdagangan internasional memberikan kontribusi besar terhadap pertumbuhan ekonomi
+        Malaysia melalui kegiatan ekspor dan impor barang serta jasa. Nilai ekspor Malaysia
+        mencapai lebih dari <strong>313 miliar dolar AS</strong> per tahun, menjadikannya salah satu
+        eksportir terbesar di Asia Tenggara.
+      </p>
+      <img class="hero-image" src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=1200&auto=format&fit=crop"
+           alt="Menara Kembar Petronas, Ikon Wisata Malaysia">
+    </section>
+
+    <!-- Section Komoditas Ekspor -->
+    <section id="komoditas" class="card">
+      <h2>Komoditas Utama Ekspor Malaysia</h2>
+      <p>
+        Malaysia memiliki berbagai produk unggulan yang diekspor ke berbagai negara dunia.
+      </p>
+      <div class="grid">
+        <div class="item">
+          <h4>Elektronik dan Semikonduktor</h4>
+          <p>Produk elektronik menjadi komoditas ekspor terbesar Malaysia, terutama semikonduktor, chip, dan perangkat teknologi yang diekspor ke pasar global.</p>
+        </div>
+        <div class="item">
+          <h4>Minyak Sawit</h4>
+          <p>Malaysia merupakan salah satu produsen dan eksportir minyak sawit terbesar dunia, memenuhi kebutuhan minyak nabati global.</p>
+        </div>
+        <div class="item">
+          <h4>Minyak Bumi</h4>
+          <p>Malaysia mengekspor minyak mentah dan produk olahan minyak ke berbagai negara Asia, termasuk China, Jepang, dan Korea Selatan.</p>
+        </div>
+        <div class="item">
+          <h4>Gas Alam</h4>
+          <p>Gas alam cair atau LNG menjadi salah satu sumber devisa penting Malaysia, diekspor ke Jepang, China, dan Korea Selatan.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Industri dan Kendaraan</h4>
+          <p>Malaysia juga mengekspor kendaraan, mesin industri, alat berat, dan produk otomotif ke berbagai negara.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Kimia</h4>
+          <p>Industri kimia Malaysia berkembang pesat dan memiliki pasar ekspor internasional ke negara-negara Asia dan Eropa.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 45px;">Komoditas Utama Impor Malaysia</h2>
+      <p>
+        Malaysia juga melakukan impor untuk memenuhi kebutuhan industri dan masyarakat.
+      </p>
+      <div class="grid">
+        <div class="item">
+          <h4>Mesin dan Peralatan Industri</h4>
+          <p>Digunakan untuk mendukung sektor manufaktur dan industri teknologi yang terus berkembang pesat.</p>
+        </div>
+        <div class="item">
+          <h4>Komponen Elektronik</h4>
+          <p>Malaysia mengimpor berbagai komponen elektronik dan perangkat komputer untuk industri perakitan lokal.</p>
+        </div>
+        <div class="item">
+          <h4>Bahan Bakar dan Minyak</h4>
+          <p>Beberapa jenis bahan bakar dan produk energi juga diimpor dari luar negeri untuk memenuhi kebutuhan dalam negeri.</p>
+        </div>
+        <div class="item">
+          <h4>Bahan Kimia Industri</h4>
+          <p>Digunakan untuk kebutuhan produksi industri nasional di sektor farmasi, tekstil, dan manufaktur.</p>
+        </div>
+        <div class="item">
+          <h4>Bahan Pangan</h4>
+          <p>Malaysia mengimpor beberapa bahan pangan seperti gandum, susu, dan buah-buahan untuk memenuhi kebutuhan masyarakat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Ekspor & Impor -->
+    <section id="eksporimpor" class="card">
+      <h2>Nilai Ekspor dan Impor Malaysia</h2>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Keterangan</th>
+              <th>Nilai</th>
+              <th>Keterangan Tambahan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Nilai Ekspor</strong></td>
+              <td class="highlight">US$ 313 Miliar</td>
+              <td>Didominasi elektronik, minyak sawit, dan gas alam</td>
+            </tr>
+            <tr>
+              <td><strong>Nilai Impor</strong></td>
+              <td class="highlight">US$ 267 Miliar</td>
+              <td>Didominasi mesin, komponen elektronik, dan bahan kimia</td>
+            </tr>
+            <tr>
+              <td><strong>Neraca Perdagangan</strong></td>
+              <td class="highlight">Surplus US$ 46 Miliar</td>
+              <td>Ekspor lebih besar dibandingkan impor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Negara Tujuan Ekspor Utama Malaysia</h3>
+      <ul class="country-list">
+        <li>China</li>
+        <li>Singapura</li>
+        <li>Amerika Serikat</li>
+        <li>Jepang</li>
+        <li>Thailand</li>
+        <li>Korea Selatan</li>
+      </ul>
+
+      <h3>Negara Asal Impor Utama Malaysia</h3>
+      <ul class="country-list">
+        <li>China</li>
+        <li>Singapura</li>
+        <li>Amerika Serikat</li>
+        <li>Jepang</li>
+        <li>Korea Selatan</li>
+        <li>Thailand</li>
+      </ul>
+    </section>
+
+    <!-- Section Dampak -->
+    <section id="dampak" class="card">
+      <h2>Dampak Perdagangan Internasional bagi Malaysia</h2>
+      
+      <div class="dampak-grid">
+        <div class="dampak-positif">
+          <h3>Dampak Positif</h3>
+          <ul>
+            <li>Meningkatkan pendapatan negara dari sektor ekspor</li>
+            <li>Membuka banyak lapangan pekerjaan di sektor industri dan manufaktur</li>
+            <li>Mendorong pertumbuhan industri elektronik dan semikonduktor</li>
+            <li>Meningkatkan investasi asing langsung dari berbagai negara maju</li>
+            <li>Memperluas pasar produk Malaysia ke seluruh dunia</li>
+            <li>Memperkuat posisi Malaysia sebagai pusat perdagangan regional</li>
+            <li>Mendorong transfer teknologi dan peningkatan kualitas sumber daya manusia</li>
+          </ul>
+        </div>
+        <div class="dampak-negatif">
+          <h3>Dampak Negatif</h3>
+          <ul>
+            <li>Ketergantungan terhadap pasar luar negeri dan ekonomi global</li>
+            <li>Persaingan global yang semakin tinggi dengan negara tetangga</li>
+            <li>Fluktuasi harga dunia mempengaruhi stabilitas ekonomi nasional</li>
+            <li>Industri kecil dan menengah dapat kalah bersaing dengan industri besar</li>
+            <li>Tekanan terhadap lingkungan akibat industrialisasi dan perkebunan sawit</li>
+            <li>Kesenjangan ekonomi antara Semenanjung Malaysia dan Malaysia Timur</li>
+            <li>Rentan terhadap kebijakan tarif dan proteksionisme negara mitra dagang</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Kesimpulan -->
+    <section id="kesimpulan" class="card">
+      <h2>Kesimpulan</h2>
+      <p>
+        <strong>Malaysia</strong> merupakan salah satu negara dengan perdagangan internasional terbesar
+        di Asia Tenggara. Negara ini unggul dalam sektor elektronik, semikonduktor,
+        minyak sawit, minyak bumi, dan gas alam. Dengan nilai ekspor mencapai <strong>313 miliar
+        dolar AS</strong>, Malaysia menjadi kekuatan ekonomi utama di kawasan.
+      </p>
+      <p>
+        Nilai ekspor Malaysia yang lebih besar dibandingkan impor, dengan <strong>surplus
+        perdagangan sebesar 46 miliar dolar AS</strong>, menunjukkan bahwa perdagangan internasional
+        memberikan dampak positif yang signifikan terhadap perekonomian negara.
+      </p>
+      <p>
+        Dengan perkembangan industri dan teknologi yang terus meningkat, serta posisi
+        strategis di jalur perdagangan internasional, Malaysia diperkirakan akan terus
+        menjadi salah satu pusat perdagangan dan manufaktur penting di Asia.
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <p>Artikel Perdagangan Internasional Malaysia</p>
+    <p>Sumber: Bank Dunia, IMF, Kementerian Perdagangan Internasional Malaysia, ASEAN Secretariat</p>
+    <p>Malaysia - Tahun 2026</p>
+  </footer>
+
+</body>
+</html>

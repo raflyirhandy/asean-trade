@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brunei Darussalam - Perdagangan Internasional</title>
+  
+  <!-- Google Fonts untuk font yang lebih hidup dan menarik -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', 'Quicksand', 'Segoe UI', sans-serif;
+    }
+
+    /* Header dengan efek gradasi */
+    header {
+      background: linear-gradient(135deg, #f7b500, #000000, #f7b500);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Efek overlay pada header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-size: 56px;
+      margin-bottom: 15px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      font-size: 22px;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.95;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigasi Sticky */
+    nav {
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+    }
+
+    nav a:hover {
+      background: #f7b500;
+      color: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    nav a:first-child {
+      background: #f7b500;
+      color: #000000;
+    }
+
+    nav a:first-child:hover {
+      background: white;
+      color: #000000;
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 50px auto;
+    }
+
+    /* Card dengan efek modern */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 45px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+    }
+
+    h2 {
+      color: #000000;
+      margin-bottom: 25px;
+      border-left: 6px solid #f7b500;
+      padding-left: 20px;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      color: #000000;
+      margin: 30px 0 15px 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    p {
+      line-height: 1.9;
+      color: #444;
+      margin-bottom: 18px;
+      text-align: justify;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+    /* Gambar dengan efek */
+    .hero {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      margin-top: 30px;
+      display: block;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .hero:hover {
+      transform: scale(1.02);
+    }
+
+    /* Grid Komoditas */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 25px;
+    }
+
+    .item {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      padding: 28px;
+      border-radius: 20px;
+      border-top: 5px solid #f7b500;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    .item h4 {
+      color: #f7b500;
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .item p {
+      font-size: 14px;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* Tabel */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    table th {
+      background: linear-gradient(135deg, #000000, #333333);
+      color: white;
+      padding: 16px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    table td {
+      padding: 14px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    table tr:hover {
+      background: #fff3e0;
+      transition: 0.2s;
+    }
+
+    .highlight {
+      color: #f7b500;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* List Styling */
+    ul {
+      margin-left: 25px;
+      margin-top: 10px;
+    }
+
+    li {
+      margin: 12px 0;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* Dampak Grid */
+    .dampak-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 25px;
+    }
+
+    .dampak-positif {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #2e7d32;
+    }
+
+    .dampak-negatif {
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #c62828;
+    }
+
+    .dampak-positif h3, .dampak-negatif h3 {
+      margin-top: 0;
+      font-weight: 700;
+    }
+
+    .dampak-positif li, .dampak-negatif li {
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #000000, #1a1a1a);
+      color: #cbd5e1;
+      text-align: center;
+      padding: 45px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      text-align: center;
+      margin: 12px 0;
+      color: #cbd5e1;
+    }
+
+    footer p:first-child {
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 36px;
+      }
+      header p {
+        font-size: 16px;
+      }
+      nav a {
+        margin: 5px;
+        font-size: 12px;
+        padding: 6px 14px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .card {
+        padding: 25px;
+      }
+      .dampak-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Perdagangan Internasional Brunei Darussalam</h1>
+    
+  </header>
+
+  <nav>
+    <a href="index.html">Halaman Utama</a>
+    <a href="#komoditas">Komoditas</a>
+    <a href="#eksporimpor">Ekspor & Impor</a>
+    <a href="#dampak">Dampak</a>
+    <a href="#kesimpulan">Kesimpulan</a>
+  </nav>
+
+  <div class="container">
+    <!-- Section Tentang -->
+    <section id="tentang" class="card">
+      <h2>Tentang Brunei Darussalam dan Perdagangan Internasional</h2>
+      <p>
+        <strong>Brunei Darussalam</strong> adalah negara kecil di Asia Tenggara yang terletak di Pulau Kalimantan.
+        Meskipun memiliki wilayah yang kecil, Brunei termasuk negara dengan pendapatan per kapita
+        tertinggi di kawasan ASEAN berkat kekayaan sumber daya alamnya.
+      </p>
+      <p>
+        Perekonomian Brunei sangat bergantung pada sektor <strong>minyak bumi dan gas alam</strong>.
+        Perdagangan internasional menjadi sumber utama pendapatan negara karena sebagian besar
+        hasil minyak dan gas diekspor ke luar negeri. Brunei merupakan anggota aktif OPEC
+        dan salah satu eksportir LNG terbesar di dunia.
+      </p>
+      <p>
+        Negara ini memiliki hubungan perdagangan dengan <strong>Jepang, China, Korea Selatan,
+        Singapura, Malaysia, dan India</strong>. Brunei juga aktif dalam perdagangan regional
+        melalui kerjasama ASEAN dan berbagai perjanjian perdagangan bebas.
+      </p>
+      <img class="hero" src="https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?q=80&w=1200&auto=format&fit=crop"
+           alt="Masjid Sultan Omar Ali Saifuddin, Ikon Brunei Darussalam">
+    </section>
+
+    <!-- Section Komoditas Ekspor -->
+    <section id="komoditas" class="card">
+      <h2>Komoditas Utama Ekspor Brunei Darussalam</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Minyak Bumi</h4>
+          <p>Minyak bumi merupakan komoditas ekspor terbesar Brunei dan sumber utama pendapatan negara, diekspor ke Jepang, China, dan Korea Selatan.</p>
+        </div>
+        <div class="item">
+          <h4>Gas Alam Cair</h4>
+          <p>Brunei menjadi salah satu eksportir LNG penting di kawasan Asia, terutama ke Jepang dan Korea Selatan.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Energi</h4>
+          <p>Produk energi dan turunannya seperti bahan bakar olahan banyak diekspor ke negara-negara industri Asia.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Petrokimia</h4>
+          <p>Industri petrokimia Brunei berkembang untuk mendukung ekspor energi dan diversifikasi ekonomi.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 45px;">Komoditas Utama Impor Brunei Darussalam</h2>
+      <div class="grid">
+        <div class="item">
+          <h4>Bahan Pangan</h4>
+          <p>Brunei mengimpor sebagian besar kebutuhan makanan dari luar negeri karena keterbatasan lahan pertanian.</p>
+        </div>
+        <div class="item">
+          <h4>Kendaraan dan Alat Transportasi</h4>
+          <p>Kendaraan bermotor dan suku cadang menjadi barang impor penting untuk memenuhi kebutuhan masyarakat.</p>
+        </div>
+        <div class="item">
+          <h4>Elektronik dan Peralatan Listrik</h4>
+          <p>Produk elektronik, ponsel, komputer, dan perangkat teknologi diimpor untuk kebutuhan masyarakat.</p>
+        </div>
+        <div class="item">
+          <h4>Mesin dan Peralatan Industri</h4>
+          <p>Digunakan untuk mendukung industri energi, konstruksi, dan pembangunan nasional.</p>
+        </div>
+        <div class="item">
+          <h4>Produk Kimia dan Farmasi</h4>
+          <p>Bahan kimia industri dan produk farmasi diimpor untuk sektor kesehatan dan industri.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Ekspor & Impor -->
+    <section id="eksporimpor" class="card">
+      <h2>Nilai Ekspor dan Impor Brunei Darussalam</h2>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Keterangan</th>
+              <th>Nilai</th>
+              <th>Keterangan Tambahan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Nilai Ekspor</strong></td>
+              <td class="highlight">US$ 12 Miliar</td>
+              <td>Didominasi minyak bumi dan gas alam</td>
+            </tr>
+            <tr>
+              <td><strong>Nilai Impor</strong></td>
+              <td class="highlight">US$ 4 Miliar</td>
+              <td>Didominasi pangan, kendaraan, dan barang konsumsi</td>
+            </tr>
+            <tr>
+              <td><strong>Neraca Perdagangan</strong></td>
+              <td class="highlight">Surplus US$ 8 Miliar</td>
+              <td>Ekspor jauh lebih besar dibandingkan impor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Negara Tujuan Ekspor Utama Brunei Darussalam</h3>
+      <ul>
+        <li>Jepang</li>
+        <li>China</li>
+        <li>Korea Selatan</li>
+        <li>Singapura</li>
+        <li>Malaysia</li>
+        <li>India</li>
+      </ul>
+
+      <h3>Negara Asal Impor Utama Brunei Darussalam</h3>
+      <ul>
+        <li>China</li>
+        <li>Malaysia</li>
+        <li>Singapura</li>
+        <li>Jepang</li>
+        <li>Amerika Serikat</li>
+        <li>Thailand</li>
+      </ul>
+    </section>
+
+    <!-- Section Dampak -->
+    <section id="dampak" class="card">
+      <h2>Dampak Perdagangan Internasional bagi Brunei Darussalam</h2>
+      
+      <div class="dampak-grid">
+        <div class="dampak-positif">
+          <h3>Dampak Positif</h3>
+          <ul>
+            <li>Meningkatkan pendapatan negara dari sektor ekspor energi</li>
+            <li>Mendorong pertumbuhan sektor minyak dan gas alam</li>
+            <li>Meningkatkan kesejahteraan masyarakat dengan pendapatan per kapita tinggi</li>
+            <li>Membuka kerja sama internasional dan investasi asing</li>
+            <li>Meningkatkan infrastruktur dan fasilitas publik</li>
+            <li>Memberikan subsidi dan layanan gratis bagi masyarakat</li>
+          </ul>
+        </div>
+        <div class="dampak-negatif">
+          <h3>Dampak Negatif</h3>
+          <ul>
+            <li>Ketergantungan tinggi terhadap minyak bumi dan gas alam</li>
+            <li>Ekonomi sangat dipengaruhi fluktuasi harga energi dunia</li>
+            <li>Ketergantungan terhadap impor pangan dan barang konsumsi</li>
+            <li>Persaingan energi global yang semakin tinggi</li>
+            <li>Rentan terhadap krisis energi global dan penurunan harga minyak</li>
+            <li>Keterbatasan diversifikasi ekonomi di luar sektor energi</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Kesimpulan -->
+    <section id="kesimpulan" class="card">
+      <h2>Kesimpulan</h2>
+      <p>
+        <strong>Brunei Darussalam</strong> merupakan negara dengan perdagangan internasional yang sangat bergantung
+        pada sektor energi, khususnya <strong>minyak bumi dan gas alam</strong>. Dengan cadangan energi yang melimpah,
+        Brunei berhasil mencapai pendapatan per kapita tertinggi di Asia Tenggara.
+      </p>
+      <p>
+        Nilai ekspor Brunei yang jauh lebih besar dibandingkan impor membuat negara ini sering
+        mengalami <strong>surplus perdagangan</strong> yang signifikan. Hal ini memungkinkan Brunei
+        menyediakan layanan publik gratis seperti pendidikan dan kesehatan bagi warganya.
+      </p>
+      <p>
+        Perdagangan internasional memberikan kontribusi besar terhadap pendapatan nasional dan
+        kesejahteraan masyarakat Brunei Darussalam. Namun, untuk keberlanjutan jangka panjang,
+        Brunei perlu terus melakukan <strong>diversifikasi ekonomi</strong> di luar sektor energi
+        seperti pariwisata, keuangan syariah, dan teknologi informasi.
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <p>Artikel Perdagangan Internasional Brunei Darussalam</p>
+    <p>Sumber: Bank Dunia, IMF, Kementerian Keuangan Brunei, ASEAN Secretariat</p>
+    <p>Negara Brunei Darussalam - Tahun 2026</p>
+  </footer>
+
+</body>
+</html>
