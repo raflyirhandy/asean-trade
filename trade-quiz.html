@@ -242,10 +242,9 @@
   const playerColors = ["#d90429", "#001f54", "#1f9d55", "#ff8c00"];
   const playerShorts = ["P1", "P2", "P3", "P4"];
 
-  let players = [], currentPlayerIdx = 0, gameActive = true, winnerDeclared = false, finishWinner = null;
+  let players = [], currentPlayerIdx = 0, gameActive = true, winnerDeclared = false;
   let waitingAnswer = false, currentCallback = null, timerInt = null;
-  let isSinglePlayer = false;
-  let singlePlayerIndex = 0;
+  let currentQuestionIndex = 0;
 
   // ======================= MOTIVASI BERDASARKAN SKOR =======================
   function getMotivationByScore(score, maxScore = 100) {
@@ -342,10 +341,8 @@
     });
     const turnSpan = document.getElementById("turnName");
     if(turnSpan) {
-      if(isSinglePlayer && gameActive) {
-        turnSpan.innerText = `Soal ${singlePlayerIndex + 1} dari 25`;
-      } else if(gameActive && !winnerDeclared) {
-        turnSpan.innerText = `Giliran: ${players[currentPlayerIdx].name}`;
+      if(gameActive && !winnerDeclared) {
+        turnSpan.innerText = `Soal ${currentQuestionIndex + 1}/25 - Giliran: ${players[currentPlayerIdx].name}`;
       } else {
         turnSpan.innerText = "Game Selesai";
       }
@@ -375,14 +372,14 @@
         if(isCorrect) { 
           btn.classList.add("correct-answer");
           fb.className = "feedback-msg feedback-correct"; 
-          fb.innerHTML = `Benar! +4 poin<br>${q.explanation}`; 
+          fb.innerHTML = `Benar! +4 poin (Maju 2 kotak)<br>${q.explanation}`; 
         } else { 
           btn.classList.add("wrong-answer");
           document.querySelectorAll(".opt-btn")[q.correct].classList.add("correct-answer");
           fb.className = "feedback-msg feedback-wrong"; 
-          fb.innerHTML = `Salah! Jawaban benar: ${q.options[q.correct]}<br>${q.explanation}`; 
+          fb.innerHTML = `Salah! (Maju 1 kotak)<br>Jawaban benar: ${q.options[q.correct]}<br>${q.explanation}`; 
         }
-        setTimeout(()=>{ document.getElementById("quizModal").classList.remove("active"); callback(isCorrect); }, 2000);
+        setTimeout(()=>{ document.getElementById("quizModal").classList.remove("active"); callback(isCorrect); }, 2500);
       };
       optsDiv.appendChild(btn);
     });
@@ -393,119 +390,72 @@
     timerInt = setInterval(() => {
       if(!waitingAnswer) return;
       timeLeft--; let percent = (timeLeft/15)*100; progress.style.width = percent+"%"; textSpan.innerText = `Waktu tersisa: ${timeLeft} detik`;
-      if(timeLeft <= 0) { stopTimer(); if(waitingAnswer) { waitingAnswer=false; document.querySelectorAll(".opt-btn").forEach(b=>b.disabled=true); document.querySelectorAll(".opt-btn")[q.correct].classList.add("correct-answer"); document.getElementById("feedbackMsg").className="feedback-msg feedback-wrong"; document.getElementById("feedbackMsg").innerHTML = `Waktu habis! Jawaban benar: ${q.options[q.correct]}<br>${q.explanation}`; setTimeout(()=>{ document.getElementById("quizModal").classList.remove("active"); callback(false); },2000); } }
+      if(timeLeft <= 0) { 
+          stopTimer(); 
+          if(waitingAnswer) { 
+              waitingAnswer=false; 
+              document.querySelectorAll(".opt-btn").forEach(b=>b.disabled=true); 
+              document.querySelectorAll(".opt-btn")[q.correct].classList.add("correct-answer"); 
+              document.getElementById("feedbackMsg").className="feedback-msg feedback-wrong"; 
+              document.getElementById("feedbackMsg").innerHTML = `Waktu habis! (Maju 1 kotak)<br>Jawaban benar: ${q.options[q.correct]}<br>${q.explanation}`; 
+              setTimeout(()=>{ document.getElementById("quizModal").classList.remove("active"); callback(false); }, 2500); 
+          } 
+      }
     }, 1000);
   }
 
-  function movePlayer(steps, isCorrect) {
-    let p = players[currentPlayerIdx];
-    if(isCorrect) p.score += 4;
-    let newPos = p.pos + steps;
-    if(newPos >= 25) { 
-      p.pos = 24; 
-      finishWinner = { ...p }; 
-      gameActive = false; 
-      winnerDeclared = true; 
-      updateAll(); 
-      showWinner(); 
-      return false; 
-    }
-    newPos = applyLadderSnake(newPos); 
-    p.pos = Math.min(newPos, 24); 
-    updateAll(); 
-    return true;
-  }
-
-  // ======================= 1 PEMAIN =======================
-  function nextSinglePlayerQuestion() {
+  // ======================= PERGERAKAN & KUIS BERGANTIAN (2 PEMAIN) =======================
+  function nextTurnQuestion() {
     if(!gameActive || winnerDeclared || waitingAnswer) return;
-    if(singlePlayerIndex >= 25) {
-      gameActive = false;
-      winnerDeclared = true;
-      finishWinner = { ...players[0] };
-      updateAll();
-      showWinner();
-      return;
-    }
+    if(currentQuestionIndex >= 25) { endGame(); return; }
     
     const diceDiv = document.getElementById("diceBtn");
     const rollBtn = document.getElementById("rollAction");
     diceDiv.classList.add("disabled");
     rollBtn.disabled = true;
     
-    document.getElementById("turnName").innerText = `Soal ${singlePlayerIndex + 1} dari 25`;
+    document.getElementById("turnName").innerText = `Soal ${currentQuestionIndex + 1}/25 - Giliran: ${players[currentPlayerIdx].name}`;
     
-    showQuestion(singlePlayerIndex, (isCorrect) => {
-      let p = players[0];
+    showQuestion(currentQuestionIndex, (isCorrect) => {
+      let p = players[currentPlayerIdx];
+      
       if(isCorrect) p.score += 4;
       
-      let newPos = p.pos + 1;
-      if(newPos >= 25) { 
-        p.pos = 24; 
-        finishWinner = { ...p }; 
-        gameActive = false; 
-        winnerDeclared = true; 
-        updateAll(); 
-        showWinner(); 
-        return; 
+      // Bergerak 2 kotak jika benar, 1 kotak jika salah
+      let steps = isCorrect ? 2 : 1;
+      let newPos = p.pos + steps;
+      
+      if (newPos >= 24) {
+          p.pos = 24;
+      } else {
+          newPos = applyLadderSnake(newPos); 
+          p.pos = Math.min(newPos, 24);
       }
-      newPos = applyLadderSnake(newPos); 
-      p.pos = Math.min(newPos, 24);
       
-      singlePlayerIndex++;
+      currentQuestionIndex++;
+      if (currentQuestionIndex < 25) {
+          currentPlayerIdx = (currentPlayerIdx + 1) % 2;
+      }
+      
       updateAll();
-      gameActive = true;
       
-      diceDiv.classList.remove("disabled");
-      rollBtn.disabled = false;
-      
-      if(gameActive && !winnerDeclared && singlePlayerIndex < 25) {
-        setTimeout(() => {
-          nextSinglePlayerQuestion();
-        }, 800);
-      } else if(singlePlayerIndex >= 25) {
-        gameActive = false;
-        winnerDeclared = true;
-        finishWinner = { ...players[0] };
-        updateAll();
-        showWinner();
+      if(currentQuestionIndex >= 25) {
+        endGame();
+      } else {
+        gameActive = true;
+        diceDiv.classList.remove("disabled");
+        rollBtn.disabled = false;
+        rollBtn.innerText = `JAWAB SOAL (${players[currentPlayerIdx].name})`;
+        document.getElementById("turnName").innerText = `Soal ${currentQuestionIndex + 1}/25 - Giliran: ${players[currentPlayerIdx].name}`;
       }
     });
   }
 
-  // ======================= DADU UNTUK 2-4 PEMAIN =======================
-  function rollDice() {
-    if(!gameActive || winnerDeclared || waitingAnswer) { 
-      alert("Game sedang berjalan atau sudah selesai!"); 
-      return; 
-    }
-    if(isSinglePlayer) {
-      nextSinglePlayerQuestion();
-      return;
-    }
-    
-    let dice = Math.floor(Math.random()*6)+1;
-    document.getElementById("diceInner").innerText = dice;
-    let diceDiv = document.getElementById("diceBtn"); 
-    diceDiv.style.transform = "translateY(6px)"; 
-    setTimeout(()=>diceDiv.style.transform="translateY(0)",150);
-    
-    const rollBtn = document.getElementById("rollAction");
-    rollBtn.disabled = true;
-    
-    let targetPos = Math.min(players[currentPlayerIdx].pos + dice, 24);
-    showQuestion(targetPos, (isCorrect) => {
-      let totalStep = dice + (isCorrect ? 1 : 0);
-      let cont = movePlayer(totalStep, isCorrect);
-      
-      // PERBAIKAN LOGIKA: gameActive diubah jadi true dulu sebelum pengecekan turn
-      gameActive = true; 
-      if(!winnerDeclared && cont && players.length) { 
-        currentPlayerIdx = (currentPlayerIdx+1) % players.length; 
-      }
-      updateAll(); 
-      rollBtn.disabled = false;
-    });
+  function endGame() {
+      gameActive = false;
+      winnerDeclared = true;
+      updateAll();
+      showWinner();
   }
 
   // ======================= WINNER MODAL =======================
@@ -513,27 +463,29 @@
     let highScore = -1, best = null; 
     players.forEach(p=>{ if(p.score > highScore){ highScore=p.score; best=p; } });
     
-    const maxScore = 100;
+    const maxScore = 52; // Max poin yang mungkin didapat seorang pemain (13 soal * 4 poin)
     const motivasi = getMotivationByScore(highScore, maxScore);
     
     let winnerHtml = `
       <div class="winner-modal">
         <span class="trophy ${motivasi.rankClass}">${motivasi.icon}</span>
         <div class="rank-badge ${motivasi.rankClass}">${motivasi.rank}</div>
-        <h1>GAME OVER</h1>
+        <h1>KUIS SELESAI</h1>
     `;
     
-    if(finishWinner && best && finishWinner.id===best.id) {
-      winnerHtml += `<div class="score-display"><span>${finishWinner.score}</span> poin</div>`;
-      winnerHtml += `<p style="font-weight:600; color:#001f54;">${finishWinner.name} - First to Finish & Skor Tertinggi!</p>`;
-    } else if(finishWinner) {
-      winnerHtml += `<p style="font-weight:600; color:#001f54;">🏁 Finish Pertama: ${finishWinner.name} (${finishWinner.score} pts)</p>`;
-      winnerHtml += `<div class="score-display"><span>${best?.score}</span> poin</div>`;
-      winnerHtml += `<p style="font-weight:600; color:#001f54;">Skor Tertinggi: ${best?.name}</p>`;
+    if (players[0].score === players[1].score) {
+        winnerHtml += `<p style="font-weight:600; color:#001f54; margin-top: 10px;">Hasil Seri!</p>`;
+        winnerHtml += `<div class="score-display"><span>${best.score}</span> poin</div>`;
     } else {
-      winnerHtml += `<div class="score-display"><span>${best?.score}</span> poin</div>`;
-      winnerHtml += `<p style="font-weight:600; color:#001f54;">Pemenang Skor Tertinggi: ${best?.name}</p>`;
+        winnerHtml += `<div class="score-display"><span>${best.score}</span> poin</div>`;
+        winnerHtml += `<p style="font-weight:600; color:#001f54;">Pemenang: ${best.name}</p>`;
     }
+    
+    let p1 = players[0], p2 = players[1];
+    winnerHtml += `<div class="player-summary" style="margin-top: 20px;">
+        <div class="stat"><strong>${p1.name}</strong>: ${p1.score} pts (Kotak ${p1.pos + 1})</div>
+        <div class="stat"><strong>${p2.name}</strong>: ${p2.score} pts (Kotak ${p2.pos + 1})</div>
+    </div>`;
     
     winnerHtml += `
         <div class="motivation">${motivasi.message}</div>
@@ -548,20 +500,17 @@
     winnerDeclared = true;
   }
 
-  function initGame(playerCount) {
-    players = [];
-    isSinglePlayer = (playerCount === 1);
-    singlePlayerIndex = 0;
-    
-    for(let i=0;i<playerCount;i++) {
-      let name = isSinglePlayer ? "Pemain" : `Pemain ${i+1}`;
-      players.push({ id:i, name:name, pos:0, color:playerColors[i], short:playerShorts[i], score:0 });
-    }
-    currentPlayerIdx = 0; gameActive = true; winnerDeclared = false; finishWinner = null;
+  function initGame() {
+    players = [
+      { id:0, name:"Pemain 1", pos:0, color:playerColors[0], short:playerShorts[0], score:0 },
+      { id:1, name:"Pemain 2", pos:0, color:playerColors[1], short:playerShorts[1], score:0 }
+    ];
+    currentPlayerIdx = 0; gameActive = true; winnerDeclared = false;
+    currentQuestionIndex = 0;
     
     const container = document.getElementById("gameWrapper");
     container.innerHTML = `
-      <div class="board-container">
+<div class="board-container">
   <div class="board-image">
     <img id="boardImg" src="img%202/ular_tangga.jpeg" alt="Snakes and Ladders Board" style="width:100%; max-width:650px; display:block; margin:0 auto;">
     <div class="players-overlay" id="playersOverlay"></div>
@@ -570,12 +519,12 @@
 <div class="control-panel">
   <div class="players-info"><h3>PEMAIN</h3><div class="player-list" id="playerList"></div></div>
   <div class="dice-area">
-    <div class="dice" id="diceBtn"><div class="dice-inner" id="diceInner" style="font-size:48px; font-weight:800;">${isSinglePlayer ? '?' : '1'}</div></div>
-    <button class="roll-btn" id="rollAction">${isSinglePlayer ? 'MULAI KUIS' : 'LEMPAR DADU'}</button>
+    <div class="dice" id="diceBtn"><div class="dice-inner" id="diceInner" style="font-size:48px; font-weight:800;">?</div></div>
+    <button class="roll-btn" id="rollAction">JAWAB SOAL (Pemain 1)</button>
     <button class="reset-btn" id="resetGameBtn">RESET GAME</button>
   </div>
-  <div class="turn-indicator" id="turnName">${isSinglePlayer ? 'Klik Mulai Kuis' : 'Giliran: Pemain 1'}</div>
-  ${isSinglePlayer ? '<div class="info-box">Mode 1 Pemain: Kamu akan mengerjakan 25 soal secara berurutan. Setiap jawaban benar +4 poin.</div>' : ''}
+  <div class="turn-indicator" id="turnName">Soal 1/25 - Giliran: Pemain 1</div>
+  <div class="info-box">Kuis 2 Pemain Bergantian! Jawaban benar maju 2 kotak (+4 pts), salah maju 1 kotak. Selesaikan 25 soal untuk menang!</div>
 </div>
     `;
     
@@ -587,55 +536,32 @@
     };
     updateAll();
     
-    const rollBtn = document.getElementById("rollAction");
-    if(isSinglePlayer) {
-      rollBtn.addEventListener("click", () => {
-        if(gameActive && !winnerDeclared && !waitingAnswer) {
-          rollBtn.disabled = true;
-          nextSinglePlayerQuestion();
-        }
-      });
-    } else {
-      rollBtn.addEventListener("click", rollDice);
-    }
+    document.getElementById("rollAction").addEventListener("click", () => {
+        nextTurnQuestion();
+    });
     
     document.getElementById("resetGameBtn").addEventListener("click", () => location.reload());
   }
 
   // ======================= WELCOME SCREEN =======================
-  let selected = 1;
   document.getElementById("gameWrapper").innerHTML = `
     <div class="welcome-card">
       <h2>SELAMAT DATANG DI TRADE QUIZ</h2>
-      <p>Ular Tangga - Edisi Perdagangan ASEAN</p>
-      <div class="player-selector" id="playerSelector">
-        <button data-count="1" class="player-btn active">1</button>
-        <button data-count="2" class="player-btn">2</button>
-        <button data-count="3" class="player-btn">3</button>
-        <button data-count="4" class="player-btn">4</button>
+      <p>Edisi Perdagangan ASEAN - 2 Pemain</p>
+      <div style="font-size:14px; color:#6b5b7a; margin:20px 0; line-height:1.6; text-align: left; background: #f8fafc; padding: 15px; border-radius: 12px;">
+        <strong>Cara Bermain:</strong><br>
+        1. Mode ini khusus dimainkan oleh 2 orang secara bergantian.<br>
+        2. Kalian akan menjawab total 25 soal secara berurutan.<br>
+        3. Jawaban benar: maju 2 kotak & dapat +4 poin.<br>
+        4. Jawaban salah: maju 1 kotak.<br>
+        5. Hati-hati dengan jebakan ular dan manfaatkan tangga di papan!<br>
+        6. Pemenang ditentukan dari skor tertinggi di akhir soal ke-25.
       </div>
-      <div style="font-size:13px; color:#6b5b7a; margin:10px 0;">
-        <span id="modeDesc">Mode 1 Pemain: 25 soal berurutan tanpa dadu</span>
-      </div>
-      <button class="start-btn" id="startGameBtn">MULAI GAME</button>
+      <button class="start-btn" id="startGameBtn">MULAI GAME (2 PEMAIN)</button>
     </div>
   `;
   
-  document.querySelectorAll(".player-btn").forEach(btn => { 
-    btn.addEventListener("click", () => { 
-      document.querySelectorAll(".player-btn").forEach(b=>b.classList.remove("active")); 
-      btn.classList.add("active"); 
-      selected = parseInt(btn.dataset.count);
-      const desc = document.getElementById("modeDesc");
-      if(selected === 1) {
-        desc.innerText = "Mode 1 Pemain: 25 soal berurutan tanpa dadu";
-      } else {
-        desc.innerText = `Mode ${selected} Pemain: Giliran dadu + soal`;
-      }
-    }); 
-  });
-  
-  document.getElementById("startGameBtn").addEventListener("click", () => initGame(selected));
+  document.getElementById("startGameBtn").addEventListener("click", () => initGame());
 
   // ======================= MODAL SOAL =======================
   const modalDiv = document.createElement("div"); modalDiv.id = "quizModal"; modalDiv.className = "quiz-modal";
